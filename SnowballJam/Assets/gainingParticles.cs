@@ -25,6 +25,7 @@ public class gainingParticles : MonoBehaviour
         if (touchGObject != null) {
             touchingGround tgScript = touchGObject.GetComponent<touchingGround>();
             cameraMovement camScript = cameraObject.GetComponent<cameraMovement>();
+            ballMovement ballScript = ballObject.GetComponent<ballMovement>();
             var emissionModule = particlesUp.emission;
             var rateOverTime = emissionModule.rateOverTime;
 
@@ -40,7 +41,7 @@ public class gainingParticles : MonoBehaviour
                     Vector3 bottomPoint = ballObject.transform.position - new Vector3(0, sphereRadius, 0);
                     actualParticlesDownObject.transform.position = bottomPoint;
 
-                    if (tgScript.onSnow) {
+                    if (tgScript.onSnow || ballScript.terrainLayerIndex == 1 || ballScript.terrainLayerIndex == 2) {
                         float speed = ballRigidBody.velocity.magnitude;
                         
                         rateOverTime.constant = emissionRate * speed;
