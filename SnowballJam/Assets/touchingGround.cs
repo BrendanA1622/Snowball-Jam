@@ -5,6 +5,7 @@ using UnityEngine;
 public class touchingGround : MonoBehaviour
 {
     [SerializeField] GameObject groundedDisplay;
+    [SerializeField] GameObject ballObject;
     public bool isGrounded = false;
     public bool onSnow = false;
     MeshRenderer meshRenderer;
@@ -14,6 +15,19 @@ public class touchingGround : MonoBehaviour
     }
 
     private void OnTriggerStay(Collider other) {
+
+        if (other.tag == "Enemy") {
+            if (!(other.transform.localScale.magnitude >= 1.749370 && other.transform.localScale.magnitude <= 1.749372)) {
+                Debug.Log(other.transform.localScale.magnitude);
+                if (other.transform.localScale.magnitude - 0.5f >= ballObject.transform.localScale.magnitude) {
+                    ballMovement ballScript = ballObject.GetComponent<ballMovement>();
+                    ballScript.KillPlayer();
+                } else if (other.transform.localScale.magnitude + 0.5f <= ballObject.transform.localScale.magnitude) {
+                    EnemySimpleMovement enemyScript = other.GetComponent<EnemySimpleMovement>();
+                    enemyScript.KillEnemy();
+                }
+            }
+        }
 
         if (other.tag == "Finish") {
             Debug.Log("Nice Job!");

@@ -22,6 +22,8 @@ public class ballMovement : MonoBehaviour
     public float forceMagnitude = 500.0f;
     public float speedyForceMag = 1000.0f;
     public float normalForceMag = 500.0f;
+    public float baseMass;
+    public float massScaling;
 
 
     public Terrain terrain; // Assign the terrain in the Inspector
@@ -29,6 +31,10 @@ public class ballMovement : MonoBehaviour
     private Vector3 terrainPosition;
     public int terrainLayerIndex = 0;
     private bool firstEndEmit = true;
+
+    private float speed;
+    private float scaleIncrease;
+    private Vector3 newScale;
 
 
 
@@ -60,7 +66,7 @@ public class ballMovement : MonoBehaviour
             // Get the corresponding texture index
             terrainLayerIndex = GetTerrainLayerAtPosition(relativeX, relativeZ);
 
-            Debug.Log("Current Terrain Layer Index: " + terrainLayerIndex);
+            // Debug.Log("Current Terrain Layer Index: " + terrainLayerIndex);
         }
     }
 
@@ -74,20 +80,22 @@ public class ballMovement : MonoBehaviour
                 if (tgScript.isGrounded) {
                     float direction = camScript.currentRotation;
 
-                    rb.AddForce((float)(Time.deltaTime * (forceMagnitude * (1f+rb.transform.localScale.magnitude)) * Input.GetAxis("Vertical") * Math.Sin((direction/360.0) * (2 * Math.PI))),0,(float)(Time.deltaTime * (forceMagnitude * (1f+rb.transform.localScale.magnitude)) * Input.GetAxis("Vertical") * Math.Cos((direction/360.0) * (2 * Math.PI))));
+                    rb.AddForce((float)(Time.deltaTime * forceMagnitude * (Mathf.Pow(rb.transform.localScale.magnitude,3)) * Input.GetAxis("Vertical") * Math.Sin((direction/360.0) * (2 * Math.PI))),0,(float)(Time.deltaTime * (forceMagnitude * (Mathf.Pow(rb.transform.localScale.magnitude,3))) * Input.GetAxis("Vertical") * Math.Cos((direction/360.0) * (2 * Math.PI))));
 
 
                     if (tgScript.onSnow || terrainLayerIndex == 1 || terrainLayerIndex == 2) {
-                        float speed = rb.velocity.magnitude;
-                        float scaleIncrease = speed * growthFactor * Time.deltaTime;
-                        Vector3 newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
+                        speed = rb.velocity.magnitude;
+                        scaleIncrease = speed * growthFactor * Time.deltaTime;
+                        newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
                         newScale = Vector3.Min(newScale, Vector3.one * maxScale);
+                        rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
                         rb.transform.localScale = newScale;
                     } else {
-                        float speed = rb.velocity.magnitude;
-                        float scaleIncrease = -speed * growthFactor * Time.deltaTime;
-                        Vector3 newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
+                        speed = rb.velocity.magnitude;
+                        scaleIncrease = -speed * growthFactor * 2.5f * Time.deltaTime;
+                        newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
                         newScale = Vector3.Max(newScale, Vector3.one * minScale);
+                        rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
                         rb.transform.localScale = newScale;
                     }
 
@@ -96,8 +104,12 @@ public class ballMovement : MonoBehaviour
                     } else {
                         forceMagnitude = normalForceMag;
                     }
-                    
                 }
+                scaleIncrease = -growthFactor * 3f * Time.deltaTime;
+                newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
+                newScale = Vector3.Max(newScale, Vector3.one * minScale);
+                rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
+                rb.transform.localScale = newScale;
             }
         }
         if (rb.transform.localScale.magnitude <= (Vector3.one * minScale).magnitude) {
@@ -105,7 +117,15 @@ public class ballMovement : MonoBehaviour
         }
     }
 
-    private IEnumerator EmitParticlesAndReset() {
+    public void increaseScale(Vector3 scaleIncrease) {
+        rb.transform.localScale += scaleIncrease;
+    }
+
+    public void KillPlayer() {
+        StartCoroutine(EmitParticlesAndReset());
+    }
+
+    public IEnumerator EmitParticlesAndReset() {
         if (endParticles != null && firstEndEmit) {
             endParticles.Play();
             firstEndEmit = false;
