@@ -18,13 +18,15 @@ public class touchingGround : MonoBehaviour
 
         if (other.tag == "Enemy") {
             if (!(other.transform.localScale.magnitude >= 1.749370 && other.transform.localScale.magnitude <= 1.749372)) {
-                Debug.Log(other.transform.localScale.magnitude);
+                // Debug.Log(other.transform.localScale.magnitude);
                 if (other.transform.localScale.magnitude - 0.5f >= ballObject.transform.localScale.magnitude) {
                     ballMovement ballScript = ballObject.GetComponent<ballMovement>();
                     ballScript.KillPlayer();
                 } else if (other.transform.localScale.magnitude + 0.5f <= ballObject.transform.localScale.magnitude) {
-                    EnemySimpleMovement enemyScript = other.GetComponent<EnemySimpleMovement>();
-                    enemyScript.KillEnemy();
+                    if (other.GetComponent<EnemySimpleMovement>()) {
+                        EnemySimpleMovement enemyScript = other.GetComponent<EnemySimpleMovement>();
+                        enemyScript.KillEnemy();
+                    }
                 }
             }
         }

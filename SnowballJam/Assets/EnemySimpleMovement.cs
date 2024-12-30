@@ -7,14 +7,20 @@ using UnityEngine.SceneManagement;
 
 public class EnemySimpleMovement : MonoBehaviour
 {
+    [SerializeField] GameObject otherEnemy;
+    [SerializeField] GameObject otherEnemy2;
+    [SerializeField] GameObject otherEnemy3;
+    [SerializeField] GameObject otherEnemy4;
     [SerializeField] GameObject originalBallObject;
     [SerializeField] GameObject ballObject;
+    [SerializeField] GameObject ballObjectGhost;
+
     [SerializeField] Rigidbody rb;
     [SerializeField] GameObject touchGObject;
     [SerializeField] ParticleSystem endParticles;
 
 
-    public Vector3 startPosition;
+    private Vector3 startPosition;
     public Vector3 startScale;
     public float growthFactor = 0.01f;
     public float maxScale = 5.0f;
@@ -36,13 +42,13 @@ public class EnemySimpleMovement : MonoBehaviour
     private float speed;
     private float scaleIncrease;
     private Vector3 newScale;
-    private MeshRenderer meshRenderer;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        startPosition = transform.localPosition;
         transform.localPosition = startPosition;
         transform.localScale = startScale;
         if (terrain != null)
@@ -76,12 +82,35 @@ public class EnemySimpleMovement : MonoBehaviour
 
     private void FixedUpdate() {
         if (touchGObject != null) {
-            touchingGround tgScript = touchGObject.GetComponent<touchingGround>();
+            EnemyTG tgScript = touchGObject.GetComponent<EnemyTG>();
             if (tgScript != null) {
                 if (tgScript.isGrounded) {
                     Vector3 directionToBall = originalBallObject.transform.position - transform.position;
+                    Vector3 directionToEnemy = otherEnemy.transform.position - transform.position;
+                    Vector3 directionToEnemy2 = otherEnemy2.transform.position - transform.position;
+                    Vector3 directionToEnemy3 = otherEnemy3.transform.position - transform.position;
+                    Vector3 directionToEnemy4 = otherEnemy4.transform.position - transform.position;
                     directionToBall.y = 0;
-                    float direction = Vector3.SignedAngle(Vector3.forward, directionToBall, Vector3.up) + 180.0f;
+                    directionToEnemy.y = 0;
+                    directionToEnemy2.y = 0;
+                    directionToEnemy3.y = 0;
+                    directionToEnemy4.y = 0;
+                    float direction;
+                    float shortestLength = Mathf.Min(directionToBall.magnitude, directionToEnemy.magnitude, directionToEnemy2.magnitude, directionToEnemy3.magnitude, directionToEnemy4.magnitude);
+                    if (shortestLength == directionToBall.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToBall, Vector3.up) + 180.0f;
+                    } else if (shortestLength == directionToEnemy.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy, Vector3.up) + 180.0f;
+                    } else if (shortestLength == directionToEnemy2.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy2, Vector3.up) + 180.0f;
+                    } else if (shortestLength == directionToEnemy3.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy3, Vector3.up) + 180.0f;
+                    } else if (shortestLength == directionToEnemy4.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy4, Vector3.up) + 180.0f;
+                    } else {
+                        direction = 0f;
+                    }
+                    
                     // Debug.Log("X Force Direction: " + direction);
 
                     rb.AddForce((float)(Time.deltaTime * forceMagnitude * (Mathf.Pow(rb.transform.localScale.magnitude,3)) * -1.0 * Math.Sin((direction/360.0) * (2 * Math.PI))),0,(float)(Time.deltaTime * (forceMagnitude * (Mathf.Pow(rb.transform.localScale.magnitude,3))) * -1.0 * Math.Cos((direction/360.0) * (2 * Math.PI))));
@@ -132,15 +161,26 @@ public class EnemySimpleMovement : MonoBehaviour
                     
             endParticles.Play();
             firstEndEmit = false;
-            meshRenderer = ballObject.GetComponent<MeshRenderer>();
+            MeshRenderer meshRenderer = ballObject.GetComponent<MeshRenderer>();
             meshRenderer.enabled = false;
+            MeshRenderer meshRendererGhost = ballObjectGhost.GetComponent<MeshRenderer>();
+            Collider colliderOfInterest = ballObject.GetComponent<Collider>();
+            colliderOfInterest.enabled = false;
+            meshRendererGhost.enabled = false;
         }
         yield return new WaitForSeconds(2.0f);
-        transform.localPosition = startPosition;
-        transform.localScale = startScale;
-        meshRenderer = ballObject.GetComponent<MeshRenderer>();
-        meshRenderer.enabled = true;
-        firstEndEmit = true;
+        if (!firstEndEmit) {
+            transform.localPosition = startPosition;
+            transform.localScale = startScale;
+            MeshRenderer meshRenderer = ballObject.GetComponent<MeshRenderer>();
+            meshRenderer.enabled = true;
+            MeshRenderer meshRendererGhost = ballObjectGhost.GetComponent<MeshRenderer>();
+            meshRendererGhost.enabled = true;
+            Collider colliderOfInterest = ballObject.GetComponent<Collider>();
+            colliderOfInterest.enabled = true;
+            firstEndEmit = true;
+        }
+        
     }
 
 

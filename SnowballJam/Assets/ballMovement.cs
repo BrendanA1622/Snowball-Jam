@@ -36,11 +36,16 @@ public class ballMovement : MonoBehaviour
     private float scaleIncrease;
     private Vector3 newScale;
 
+    private Vector3 startPosition;
+    private Vector3 startScale;
+    private MeshRenderer meshRenderer;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        startPosition = transform.position;
+        startScale = transform.localScale;
         if (terrain != null)
         {
             terrainData = terrain.terrainData;
@@ -129,12 +134,24 @@ public class ballMovement : MonoBehaviour
         if (endParticles != null && firstEndEmit) {
             endParticles.Play();
             firstEndEmit = false;
-            MeshRenderer meshRenderer = ballObject.GetComponent<MeshRenderer>();
+            meshRenderer = ballObject.GetComponent<MeshRenderer>();
             meshRenderer.enabled = false;
+            Collider colliderOfInterest = ballObject.GetComponent<Collider>();
+            colliderOfInterest.enabled = false;
+            rb.useGravity = false;
         }
         yield return new WaitForSeconds(2.0f);
-        Time.timeScale = 1.0f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (!firstEndEmit) {
+            transform.localPosition = startPosition;
+            transform.localScale = startScale;
+            meshRenderer = ballObject.GetComponent<MeshRenderer>();
+            meshRenderer.enabled = true;
+            Collider colliderOfInterest = ballObject.GetComponent<Collider>();
+            colliderOfInterest.enabled = true;
+            rb.useGravity = true;
+            firstEndEmit = true;
+        }
+        
     }
 
 

@@ -356,6 +356,7 @@
 "Assets/cameraMovement.cs"
 "Assets/CollectCube.cs"
 "Assets/EnemySimpleMovement.cs"
+"Assets/EnemyTG.cs"
 "Assets/followBallPos.cs"
 "Assets/gainingParticles.cs"
 "Assets/touchingGround.cs"
