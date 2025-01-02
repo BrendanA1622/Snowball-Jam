@@ -1,12 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class ballMovement : MonoBehaviour
 {
+    [SerializeField] GameObject displayObject;
+    [SerializeField] private GameObject allParticles;
+    [SerializeField] private ParticleSystem jumpParticles;
+    [SerializeField] private ParticleSystem dashParticles;
+    [SerializeField] private ParticleSystem poundParticles;
+    [SerializeField] private GameObject dashParticlesObject;
+
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI highScoreText;
+
+
+    [SerializeField] GameObject[] dashesFullObjects;
+    [SerializeField] GameObject[] dashesEmptyObjects;
+    [SerializeField] GameObject[] jumpsFullObjects;
+    [SerializeField] GameObject[] jumpsEmptyObjects;
+
     [SerializeField] GameObject cameraObject;
     [SerializeField] GameObject ballObject;
     [SerializeField] Rigidbody rb;
@@ -14,10 +30,10 @@ public class ballMovement : MonoBehaviour
     [SerializeField] ParticleSystem endParticles;
 
 
-    public float growthFactor = 0.01f;
+    private float growthFactor = 0.02f;
     public float maxScale = 5.0f;
     public float minScale = 0.3f;
-    public float camDistScale = 4.0f;
+    public float camDistScale = 8.0f;
 
     public float forceMagnitude = 500.0f;
     public float speedyForceMag = 1000.0f;
@@ -39,6 +55,24 @@ public class ballMovement : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 startScale;
     private MeshRenderer meshRenderer;
+    public float jumpVelocity = 20f;
+    public float dashVelocity = 25f;
+    public float gravityMultiplier = 2f;
+    
+    public float baseAcceleration = 1.3f;
+
+    private float numJumps = 0.1f;
+    public float jumpRecharge = 1f;
+    public float jumpsAllowed = 1f;
+
+    private float numDashes = 0.1f;
+    public float dashRecharge = 1f;
+    public float dashesAllowed = 1f;
+
+    private float score = 0.0f;
+    private float highScore = 0.0f;
+    public float maxRBSubstitute = 40.0f;
+    [SerializeField] Leaderboard leaderboard;
 
 
     // Start is called before the first frame update
@@ -60,6 +94,121 @@ public class ballMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        score = rb.transform.localScale.magnitude * 100f;
+        leaderboard.scores[10] = (int)score;
+
+        allParticles.transform.localScale = rb.transform.localScale;
+        jumpParticles.transform.localScale = rb.transform.localScale;
+        dashParticles.transform.localScale = rb.transform.localScale;
+        poundParticles.transform.localScale = rb.transform.localScale;
+
+        
+        if (score > highScore) {
+            highScore = score;
+        }
+        scoreText.text = "SCORE: " + (int)score;
+        highScoreText.text = "HIGHSCORE: " + (int)highScore;
+
+
+        growthFactor = 0.025f / (1f + 0.5f * rb.transform.localScale.magnitude);
+
+        if (Input.GetKeyDown(KeyCode.Space) && numJumps > 0f) {
+            if (rb != null) {
+                Vector3 velocity = rb.velocity;
+                velocity.y = jumpVelocity * (1f + Mathf.Min(maxRBSubstitute,rb.transform.localScale.magnitude) * 0.03f);
+                rb.velocity = velocity;
+                jumpParticles.Play();
+                numJumps -= 1f;
+            }
+        }
+
+        int jumpsIndex = 0;
+        foreach (GameObject obj in jumpsFullObjects) {
+            if (obj != null) {
+                if (numJumps <= jumpsIndex) {
+                    obj.SetActive(false);
+                } else {
+                    obj.SetActive(true);
+                }
+                if (jumpsAllowed <= jumpsIndex) {
+                    obj.SetActive(false);
+                }
+            }
+            jumpsIndex += 1;
+        }
+        int emptyJumpsIndex = 0;
+        foreach (GameObject obj in jumpsEmptyObjects) {
+            if (obj != null) {
+                if (jumpsAllowed <= emptyJumpsIndex) {
+                    obj.SetActive(false);
+                } else {
+                    obj.SetActive(true);
+                }
+            }
+            emptyJumpsIndex += 1;
+        }
+
+        
+
+
+
+        if (Input.GetKeyDown(KeyCode.UpArrow) && numDashes > 0f) {
+            if (rb != null) {
+                cameraMovement camScript = cameraObject.GetComponent<cameraMovement>();
+                float direction = camScript.currentRotation;
+                Vector3 vecDirection = new Vector3((float)Math.Sin((direction/360.0) * (2 * Math.PI)),0,(float)Math.Cos((direction/360.0) * (2 * Math.PI)));
+                Vector3 velocity = 4.0f * vecDirection * dashVelocity * (10f + rb.transform.localScale.magnitude) * 0.03f;
+                rb.velocity = velocity;
+                dashParticlesObject.transform.rotation = Quaternion.LookRotation(-vecDirection);
+                dashParticles.Play();
+                numDashes -= 1f;
+            }
+        }
+        int dashesIndex = 0;
+        foreach (GameObject obj in dashesFullObjects) {
+            if (obj != null) {
+                if (numDashes <= dashesIndex) {
+                    obj.SetActive(false);
+                } else {
+                    obj.SetActive(true);
+                }
+                if (dashesAllowed <= dashesIndex) {
+                    obj.SetActive(false);
+                }
+            }
+            dashesIndex += 1;
+        }
+        int emptyDashesIndex = 0;
+        foreach (GameObject obj in dashesEmptyObjects) {
+            if (obj != null) {
+                if (dashesAllowed <= emptyDashesIndex) {
+                    obj.SetActive(false);
+                } else {
+                    obj.SetActive(true);
+                }
+            }
+            emptyDashesIndex += 1;
+        }
+
+
+
+
+        if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            if (rb != null) {
+                Vector3 vecDirection = new Vector3(0,-1, 0);
+                Vector3 velocity = 4.0f * vecDirection * dashVelocity * 1.2f * (10f + rb.transform.localScale.magnitude) * 0.03f;
+                poundParticles.Play();
+                rb.velocity = velocity;
+            }
+        }
+
+
+
+
+
+
+
+
         if (terrainData != null)
         {
             Vector3 ballPosition = transform.position;
@@ -76,16 +225,26 @@ public class ballMovement : MonoBehaviour
     }
 
     private void FixedUpdate() {
+
+        rb.AddForce(Physics.gravity * gravityMultiplier, ForceMode.Acceleration);
+
         if (touchGObject != null) {
             touchingGround tgScript = touchGObject.GetComponent<touchingGround>();
             cameraMovement camScript = cameraObject.GetComponent<cameraMovement>();
             if (tgScript != null) {
-                camScript.camDistance = 5.0f + rb.transform.localScale.magnitude * camDistScale;
+                camScript.camDistance = 10.0f + rb.transform.localScale.magnitude * camDistScale;
                 camScript.cameraHeightOffset = camScript.camDistance * (4.553655f/10.0f);
                 if (tgScript.isGrounded) {
-                    float direction = camScript.currentRotation;
+                    numJumps += Time.deltaTime * jumpRecharge;
+                    numJumps = Mathf.Min(jumpsAllowed - 0.9f,numJumps);
+                    numDashes += Time.deltaTime * dashRecharge;
+                    numDashes = Mathf.Min(dashesAllowed - 0.9f,numDashes);
 
-                    rb.AddForce((float)(Time.deltaTime * forceMagnitude * (Mathf.Pow(rb.transform.localScale.magnitude,3)) * Input.GetAxis("Vertical") * Math.Sin((direction/360.0) * (2 * Math.PI))),0,(float)(Time.deltaTime * (forceMagnitude * (Mathf.Pow(rb.transform.localScale.magnitude,3))) * Input.GetAxis("Vertical") * Math.Cos((direction/360.0) * (2 * Math.PI))));
+                    float direction = camScript.currentRotation;
+                    Vector3 vecDirection = new Vector3((float)Math.Sin((direction/360.0) * (2 * Math.PI)),0,(float)Math.Cos((direction/360.0) * (2 * Math.PI)));
+                    rb.AddForce(vecDirection * baseAcceleration, ForceMode.Acceleration);
+
+                    // rb.AddForce((float)(Time.deltaTime * forceMagnitude * (Mathf.Pow(rb.mass,3)) * Input.GetAxis("Vertical") * Math.Sin((direction/360.0) * (2 * Math.PI))),0,(float)(Time.deltaTime * (forceMagnitude * (Mathf.Pow(rb.mass,3))) * Input.GetAxis("Vertical") * Math.Cos((direction/360.0) * (2 * Math.PI))));
 
 
                     if (tgScript.onSnow || terrainLayerIndex == 1 || terrainLayerIndex == 2) {
@@ -127,7 +286,60 @@ public class ballMovement : MonoBehaviour
     }
 
     public void KillPlayer() {
+        jumpRecharge = 1f;
+        dashRecharge = 1f;
+        numJumps = 0.1f;
+        numDashes = 0.1f;
+        dashVelocity = 20f;
+        jumpVelocity = 20f;
+        dashesAllowed = 1f;
+        jumpsAllowed = 1f;
+
         StartCoroutine(EmitParticlesAndReset());
+    }
+
+    public void addUpgrades(int upgradeNum) {
+        int upIndex = 0;
+        DisplayNotification displayUpgrade = displayObject.GetComponent<DisplayNotification>();
+        while (upIndex < upgradeNum) {
+            float randNum = UnityEngine.Random.Range(0.0f,8.0f);
+            if (randNum < 1.0f) {
+                jumpRecharge += 0.2f;
+                displayUpgrade.display("+1 jump recharge");
+            } else if (randNum < 2.0f) {
+                dashRecharge += 0.2f;
+                displayUpgrade.display("+1 dash recharge");
+            } else if (randNum < 3.0f) {
+                if (jumpsAllowed < 5f) {
+                    jumpsAllowed += 1f;
+                } else {
+                    upIndex -= 1;
+                }
+                displayUpgrade.display("+1 jump");
+            } else if (randNum < 4.0f) {
+                if (dashesAllowed < 5f) {
+                    dashesAllowed += 1f;
+                } else {
+                    upIndex -= 1;
+                }
+                displayUpgrade.display("+1 dash");
+            } else if (randNum < 5.0f) {
+                displayUpgrade.display("+1 dash velocity");
+            } else if (randNum < 6.0f) {
+                displayUpgrade.display("+1 jump velocity");
+            } else if (randNum < 7.0f) {
+                newScale = rb.transform.localScale + Vector3.one * 1.5f;
+                newScale = Vector3.Min(newScale, Vector3.one * maxScale);
+                rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
+                rb.transform.localScale = newScale;
+                displayUpgrade.display("+1 SIZE");
+            } else if (randNum < 8.0f) {
+                baseAcceleration += 1f;
+                displayUpgrade.display("+1 speed");
+            }
+            Debug.Log(randNum);
+            upIndex += 1;
+        }
     }
 
     public IEnumerator EmitParticlesAndReset() {

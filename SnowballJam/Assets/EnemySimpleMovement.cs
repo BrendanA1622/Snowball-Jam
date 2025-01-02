@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +10,11 @@ public class EnemySimpleMovement : MonoBehaviour
     [SerializeField] GameObject otherEnemy2;
     [SerializeField] GameObject otherEnemy3;
     [SerializeField] GameObject otherEnemy4;
+    [SerializeField] GameObject otherEnemy5;
+    [SerializeField] GameObject otherEnemy6;
+    [SerializeField] GameObject otherEnemy7;
+    [SerializeField] GameObject otherEnemy8;
+    [SerializeField] GameObject otherEnemy9;
     [SerializeField] GameObject originalBallObject;
     [SerializeField] GameObject ballObject;
     [SerializeField] GameObject ballObjectGhost;
@@ -43,6 +47,9 @@ public class EnemySimpleMovement : MonoBehaviour
     private float scaleIncrease;
     private Vector3 newScale;
 
+    [SerializeField] Leaderboard leaderboard;
+    [SerializeField] int playerIndex;
+
 
 
     // Start is called before the first frame update
@@ -65,6 +72,9 @@ public class EnemySimpleMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        leaderboard.scores[playerIndex] = (int)(rb.transform.localScale.magnitude * 100f);
+        
+        
         if (terrainData != null)
         {
             Vector3 ballPosition = transform.position;
@@ -90,11 +100,21 @@ public class EnemySimpleMovement : MonoBehaviour
                     Vector3 directionToEnemy2 = otherEnemy2.transform.position - transform.position;
                     Vector3 directionToEnemy3 = otherEnemy3.transform.position - transform.position;
                     Vector3 directionToEnemy4 = otherEnemy4.transform.position - transform.position;
+                    Vector3 directionToEnemy5 = otherEnemy5.transform.position - transform.position;
+                    Vector3 directionToEnemy6 = otherEnemy6.transform.position - transform.position;
+                    Vector3 directionToEnemy7 = otherEnemy7.transform.position - transform.position;
+                    Vector3 directionToEnemy8 = otherEnemy8.transform.position - transform.position;
+                    Vector3 directionToEnemy9 = otherEnemy9.transform.position - transform.position;
                     directionToBall.y = 0;
                     directionToEnemy.y = 0;
                     directionToEnemy2.y = 0;
                     directionToEnemy3.y = 0;
                     directionToEnemy4.y = 0;
+                    directionToEnemy5.y = 0;
+                    directionToEnemy6.y = 0;
+                    directionToEnemy7.y = 0;
+                    directionToEnemy8.y = 0;
+                    directionToEnemy9.y = 0;
                     float direction;
                     float shortestLength = Mathf.Min(directionToBall.magnitude, directionToEnemy.magnitude, directionToEnemy2.magnitude, directionToEnemy3.magnitude, directionToEnemy4.magnitude);
                     if (shortestLength == directionToBall.magnitude) {
@@ -107,6 +127,16 @@ public class EnemySimpleMovement : MonoBehaviour
                         direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy3, Vector3.up) + 180.0f;
                     } else if (shortestLength == directionToEnemy4.magnitude) {
                         direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy4, Vector3.up) + 180.0f;
+                    } else if (shortestLength == directionToEnemy5.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy5, Vector3.up) + 180.0f;
+                    } else if (shortestLength == directionToEnemy6.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy6, Vector3.up) + 180.0f;
+                    } else if (shortestLength == directionToEnemy7.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy7, Vector3.up) + 180.0f;
+                    } else if (shortestLength == directionToEnemy8.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy8, Vector3.up) + 180.0f;
+                    } else if (shortestLength == directionToEnemy9.magnitude) {
+                        direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy9, Vector3.up) + 180.0f;
                     } else {
                         direction = 0f;
                     }

@@ -8,7 +8,6 @@ public class gainingParticles : MonoBehaviour
     [SerializeField] GameObject upParticleObject;
     [SerializeField] GameObject actualParticlesUpObject;
     [SerializeField] ParticleSystem particlesUp;
-    [SerializeField] GameObject actualParticlesDownObject;
     [SerializeField] ParticleSystem particlesDown;
     [SerializeField] GameObject ballObject;
     [SerializeField] Rigidbody ballRigidBody;
@@ -39,7 +38,6 @@ public class gainingParticles : MonoBehaviour
                         sphereRadius = sphereCollider.radius * ballObject.transform.localScale.x;
                     }
                     Vector3 bottomPoint = ballObject.transform.position - new Vector3(0, sphereRadius, 0);
-                    actualParticlesDownObject.transform.position = bottomPoint;
 
                     if (tgScript.onSnow || ballScript.terrainLayerIndex == 1 || ballScript.terrainLayerIndex == 2) {
                         float speed = ballRigidBody.velocity.magnitude;
@@ -55,7 +53,6 @@ public class gainingParticles : MonoBehaviour
 
                         rateOverTimeDown.constant = emissionRateDown * speed;
                         emissionModuleDown.rateOverTime = rateOverTimeDown;
-                        actualParticlesDownObject.transform.localScale = ballRigidBody.transform.localScale;
                         emissionModuleDown.enabled = true;
 
                         emissionModule.enabled = false;
