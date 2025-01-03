@@ -15,6 +15,7 @@ public class cameraMovement : MonoBehaviour
 
 
     private Vector3 travelDirection = new Vector3(0,0,1);
+    public bool inMovingGame = true;
 
     private void Start() {
         travelDirection = new Vector3(0,0,1);
@@ -30,7 +31,10 @@ public class cameraMovement : MonoBehaviour
         Vector3 desiredPosition = ballObject.transform.position + direction * camDistance;
         desiredPosition.y += cameraHeightOffset;
         
-        cameraObject.transform.position = desiredPosition;
-        cameraObject.transform.LookAt(ballObject.transform);
+        if (inMovingGame) {
+            cameraObject.transform.position = desiredPosition;
+            cameraObject.transform.LookAt(ballObject.transform);
+        }
+        
     }
 }

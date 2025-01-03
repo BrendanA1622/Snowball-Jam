@@ -73,6 +73,7 @@
     <Compile Include="Assets\ballMovement.cs" />
     <Compile Include="Assets\cameraMovement.cs" />
     <Compile Include="Assets\gainingParticles.cs" />
+    <Compile Include="Assets\SmoothCameraTransition.cs" />
     <Compile Include="Assets\EnemySimpleMovement.cs" />
   </ItemGroup>
   <ItemGroup>
