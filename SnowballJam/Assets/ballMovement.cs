@@ -220,7 +220,7 @@ public class ballMovement : MonoBehaviour
             // Get the corresponding texture index
             terrainLayerIndex = GetTerrainLayerAtPosition(relativeX, relativeZ);
 
-            // Debug.Log("Current Terrain Layer Index: " + terrainLayerIndex);
+            Debug.Log("Current Terrain Layer Index: " + terrainLayerIndex);
         }
     }
 
@@ -245,29 +245,30 @@ public class ballMovement : MonoBehaviour
                     rb.AddForce(vecDirection * baseAcceleration, ForceMode.Acceleration);
 
                     // rb.AddForce((float)(Time.deltaTime * forceMagnitude * (Mathf.Pow(rb.mass,3)) * Input.GetAxis("Vertical") * Math.Sin((direction/360.0) * (2 * Math.PI))),0,(float)(Time.deltaTime * (forceMagnitude * (Mathf.Pow(rb.mass,3))) * Input.GetAxis("Vertical") * Math.Cos((direction/360.0) * (2 * Math.PI))));
+                    speed = rb.velocity.magnitude;
+                    scaleIncrease = speed * growthFactor * Time.deltaTime;
+                    newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
+                    newScale = Vector3.Min(newScale, Vector3.one * maxScale);
+                    rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
+                    rb.transform.localScale = newScale;
+                    forceMagnitude = normalForceMag;
 
+                    // if (tgScript.onSnow || terrainLayerIndex == 1 || terrainLayerIndex == 2) {
+                        
+                    // } else {
+                    //     speed = rb.velocity.magnitude;
+                    //     scaleIncrease = -speed * growthFactor * 2.5f * Time.deltaTime;
+                    //     newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
+                    //     newScale = Vector3.Max(newScale, Vector3.one * minScale);
+                    //     rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
+                    //     rb.transform.localScale = newScale;
+                    // }
 
-                    if (tgScript.onSnow || terrainLayerIndex == 1 || terrainLayerIndex == 2) {
-                        speed = rb.velocity.magnitude;
-                        scaleIncrease = speed * growthFactor * Time.deltaTime;
-                        newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
-                        newScale = Vector3.Min(newScale, Vector3.one * maxScale);
-                        rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
-                        rb.transform.localScale = newScale;
-                    } else {
-                        speed = rb.velocity.magnitude;
-                        scaleIncrease = -speed * growthFactor * 2.5f * Time.deltaTime;
-                        newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
-                        newScale = Vector3.Max(newScale, Vector3.one * minScale);
-                        rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
-                        rb.transform.localScale = newScale;
-                    }
-
-                    if (terrainLayerIndex == 2) {
-                        forceMagnitude = speedyForceMag;
-                    } else {
-                        forceMagnitude = normalForceMag;
-                    }
+                    // if (terrainLayerIndex == 2) {
+                    //     forceMagnitude = speedyForceMag;
+                    // } else {
+                    //     forceMagnitude = normalForceMag;
+                    // }
                 }
                 scaleIncrease = -growthFactor * 3f * Time.deltaTime;
                 newScale = rb.transform.localScale + Vector3.one * scaleIncrease;

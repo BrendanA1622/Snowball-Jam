@@ -9,7 +9,6 @@ public class DisplayNotification : MonoBehaviour
     private float alphaValue = 0.0f;
     private bool increasingAlpha = false;
     private bool decreasingAlpha = false;
-    private bool playingNotification = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,7 +34,6 @@ public class DisplayNotification : MonoBehaviour
                 alphaValue = 0.0f;
                 increasingAlpha = false;
                 decreasingAlpha = false;
-                playingNotification = false;
             }
         }
 
@@ -47,7 +45,6 @@ public class DisplayNotification : MonoBehaviour
     public void display(string message) {
         alphaValue = 0.0f;
         increasingAlpha = true;
-        playingNotification = true;
         displayText.text = message;
     }
 }
