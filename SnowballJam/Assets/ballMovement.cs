@@ -74,6 +74,15 @@ public class ballMovement : MonoBehaviour
     public float maxRBSubstitute = 40.0f;
     [SerializeField] Leaderboard leaderboard;
 
+    public AudioSource audioSource; // Reference to AudioSource
+    public AudioClip soundEffectDash;
+    public AudioClip soundEffectJump;
+    public AudioClip soundEffectPound;
+    public AudioClip soundEffectKill;
+    public AudioClip soundEffectDie;
+
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -114,6 +123,7 @@ public class ballMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) && numJumps > 0f) {
             if (rb != null) {
+                audioSource.PlayOneShot(soundEffectJump);
                 Vector3 velocity = rb.velocity;
                 velocity.y = jumpVelocity * (1f + Mathf.Min(maxRBSubstitute,rb.transform.localScale.magnitude) * 0.03f);
                 rb.velocity = velocity;
@@ -154,6 +164,7 @@ public class ballMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow) && numDashes > 0f) {
             if (rb != null) {
+                audioSource.PlayOneShot(soundEffectDash);
                 cameraMovement camScript = cameraObject.GetComponent<cameraMovement>();
                 float direction = camScript.currentRotation;
                 Vector3 vecDirection = new Vector3((float)Math.Sin((direction/360.0) * (2 * Math.PI)),0,(float)Math.Cos((direction/360.0) * (2 * Math.PI)));
@@ -195,6 +206,7 @@ public class ballMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.DownArrow)) {
             if (rb != null) {
+                audioSource.PlayOneShot(soundEffectPound);
                 Vector3 vecDirection = new Vector3(0,-1, 0);
                 Vector3 velocity = 4.0f * vecDirection * dashVelocity * 1.2f * (10f + rb.transform.localScale.magnitude) * 0.03f;
                 poundParticles.Play();
@@ -300,6 +312,7 @@ public class ballMovement : MonoBehaviour
     }
 
     public void addUpgrades(int upgradeNum) {
+        audioSource.PlayOneShot(soundEffectKill);
         int upIndex = 0;
         DisplayNotification displayUpgrade = displayObject.GetComponent<DisplayNotification>();
         while (upIndex < upgradeNum) {
@@ -346,6 +359,7 @@ public class ballMovement : MonoBehaviour
     public IEnumerator EmitParticlesAndReset() {
         if (endParticles != null && firstEndEmit) {
             endParticles.Play();
+            audioSource.PlayOneShot(soundEffectDie);
             firstEndEmit = false;
             meshRenderer = ballObject.GetComponent<MeshRenderer>();
             meshRenderer.enabled = false;

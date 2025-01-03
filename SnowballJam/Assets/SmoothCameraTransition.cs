@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SmoothCameraTransition : MonoBehaviour
 {
@@ -11,6 +12,11 @@ public class SmoothCameraTransition : MonoBehaviour
     public float duration = 2.0f; // Transition duration in seconds
 
     private bool isTransitioning = false;
+
+    public void LoadSceneByIndex(int sceneIndex)
+    {
+        SceneManager.LoadScene(sceneIndex);
+    }
 
     public void MoveCamera()
     {
