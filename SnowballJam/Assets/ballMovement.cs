@@ -55,8 +55,8 @@ public class ballMovement : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 startScale;
     private MeshRenderer meshRenderer;
-    public float jumpVelocity = 20f;
-    public float dashVelocity = 25f;
+    public float jumpVelocity = 35f;
+    public float dashVelocity = 45f;
     public float gravityMultiplier = 2f;
     
     public float baseAcceleration = 1.3f;
@@ -232,7 +232,7 @@ public class ballMovement : MonoBehaviour
             // Get the corresponding texture index
             terrainLayerIndex = GetTerrainLayerAtPosition(relativeX, relativeZ);
 
-            Debug.Log("Current Terrain Layer Index: " + terrainLayerIndex);
+            // Debug.Log("Current Terrain Layer Index: " + terrainLayerIndex);
         }
     }
 
@@ -303,8 +303,8 @@ public class ballMovement : MonoBehaviour
         dashRecharge = 1f;
         numJumps = 0.1f;
         numDashes = 0.1f;
-        dashVelocity = 20f;
-        jumpVelocity = 20f;
+        dashVelocity = 35f;
+        jumpVelocity = 45f;
         dashesAllowed = 1f;
         jumpsAllowed = 1f;
 
@@ -351,7 +351,7 @@ public class ballMovement : MonoBehaviour
                 baseAcceleration += 1f;
                 displayUpgrade.display("+1 speed");
             }
-            Debug.Log(randNum);
+            // Debug.Log(randNum);
             upIndex += 1;
         }
     }

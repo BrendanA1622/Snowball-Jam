@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class touchingGround : MonoBehaviour
 {
+
     [SerializeField] GameObject groundedDisplay;
     [SerializeField] GameObject ballObject;
     public bool isGrounded = false;
@@ -15,7 +16,6 @@ public class touchingGround : MonoBehaviour
     }
 
     private void OnTriggerStay(Collider other) {
-
         if (other.tag == "Enemy") {
             if (!(other.transform.localScale.magnitude >= 1.749370 && other.transform.localScale.magnitude <= 1.749372)) {
                 // Debug.Log(other.transform.localScale.magnitude);
@@ -46,6 +46,9 @@ public class touchingGround : MonoBehaviour
 
 
         isGrounded = true;
+        // Debug.Log("playing audio");
+        
+
         if (meshRenderer) {
             meshRenderer.enabled = false;
         }
@@ -53,6 +56,8 @@ public class touchingGround : MonoBehaviour
 
     private void OnTriggerExit(Collider other) {
         isGrounded = false;
+        
+
         if (meshRenderer) {
             meshRenderer.enabled = true;
         }
