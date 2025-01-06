@@ -60,7 +60,7 @@ public class EnemySimpleMovement : MonoBehaviour
             leaderboard = leaderboardObject.GetComponent<Leaderboard>();
             if (leaderboard != null)
             {
-                Debug.Log("Leaderboard component found!");
+                // Debug.Log("Leaderboard component found!");
             }
             else
             {

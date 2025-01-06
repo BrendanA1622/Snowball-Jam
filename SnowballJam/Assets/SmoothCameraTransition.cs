@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +16,14 @@ public class SmoothCameraTransition : MonoBehaviour
 
     private bool isTransitioning = false;
 
+    public Vector3 globTargetPosition;
+    public Vector3 globTargetRotation;
+
+    void Start() {
+        transform.position = globTargetPosition;
+        transform.rotation = Quaternion.Euler(globTargetRotation);
+    }
+
     public void LoadSceneByIndex(int sceneIndex)
     {
         SceneManager.LoadScene(sceneIndex);
@@ -22,6 +31,8 @@ public class SmoothCameraTransition : MonoBehaviour
 
     public void MoveCamera()
     {
+        transform.position = globTargetPosition;
+        transform.rotation = Quaternion.Euler(globTargetRotation);
         if (!isTransitioning)
         {
             camScript.inMovingGame = false;
@@ -86,4 +97,25 @@ public class SmoothCameraTransition : MonoBehaviour
         }
         
     }
+
+    // void Update()
+    // {
+    //     transform.position = globTargetPosition;
+    //     transform.rotation = Quaternion.Euler(globTargetRotation);
+    //     isTransitioning = true;
+
+    //     Transform cameraTransform = Camera.main.transform;
+    //     Vector3 startPosition = cameraTransform.position;
+    //     Quaternion startRotation = cameraTransform.rotation;
+
+    //     Vector3 targetPosition = targetTransform.position;
+    //     Quaternion targetRotation = targetTransform.rotation;
+
+    //     cameraTransform.position = targetPosition;
+    //     cameraTransform.rotation = targetRotation;
+
+    //     isTransitioning = false;
+    // }
+
+
 }

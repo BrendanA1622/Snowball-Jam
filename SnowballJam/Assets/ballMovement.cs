@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Photon.Pun;
 
 public class ballMovement : MonoBehaviour
 {
@@ -83,12 +84,18 @@ public class ballMovement : MonoBehaviour
     public AudioClip soundEffectKill;
     public AudioClip soundEffectDie;
 
+    PhotonView view;
+    public GameObject higherPlayer;
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+
+        view = higherPlayer.GetComponent<PhotonView>();
+
         GameObject leaderboardObject = GameObject.Find("LeaderboardLabel");
         if (leaderboardObject != null)
         {
@@ -126,194 +133,198 @@ public class ballMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        score = rb.transform.localScale.magnitude * 100f;
-        leaderboard.scores[10] = (int)score;
+        if (view.IsMine) {
+            score = rb.transform.localScale.magnitude * 100f;
+            leaderboard.scores[10] = (int)score;
 
-        allParticles.transform.localScale = rb.transform.localScale;
-        jumpParticles.transform.localScale = rb.transform.localScale;
-        dashParticles.transform.localScale = rb.transform.localScale;
-        poundParticles.transform.localScale = rb.transform.localScale;
+            allParticles.transform.localScale = rb.transform.localScale;
+            jumpParticles.transform.localScale = rb.transform.localScale;
+            dashParticles.transform.localScale = rb.transform.localScale;
+            poundParticles.transform.localScale = rb.transform.localScale;
 
-        
-        if (score > highScore) {
-            highScore = score;
-        }
-        scoreText.text = "SCORE: " + (int)score;
-        highScoreText.text = "HIGHSCORE: " + (int)highScore;
-
-
-        growthFactor = 0.025f / (1f + 0.5f * rb.transform.localScale.magnitude);
-
-        if (Input.GetKeyDown(KeyCode.Space) && numJumps > 0f) {
-            if (rb != null) {
-                audioSource.PlayOneShot(soundEffectJump);
-                Vector3 velocity = rb.velocity;
-                velocity.y = jumpVelocity * (1f + Mathf.Min(maxRBSubstitute,rb.transform.localScale.magnitude) * 0.03f);
-                rb.velocity = velocity;
-                jumpParticles.Play();
-                numJumps -= 1f;
+            
+            if (score > highScore) {
+                highScore = score;
             }
-        }
+            scoreText.text = "SCORE: " + (int)score;
+            highScoreText.text = "HIGHSCORE: " + (int)highScore;
 
-        int jumpsIndex = 0;
-        foreach (GameObject obj in jumpsFullObjects) {
-            if (obj != null) {
-                if (numJumps <= jumpsIndex) {
-                    obj.SetActive(false);
-                } else {
-                    obj.SetActive(true);
-                }
-                if (jumpsAllowed <= jumpsIndex) {
-                    obj.SetActive(false);
+
+            growthFactor = 0.025f / (1f + 0.5f * rb.transform.localScale.magnitude);
+
+            if (Input.GetKeyDown(KeyCode.Space) && numJumps > 0f) {
+                if (rb != null) {
+                    audioSource.PlayOneShot(soundEffectJump);
+                    Vector3 velocity = rb.velocity;
+                    velocity.y = jumpVelocity * (1f + Mathf.Min(maxRBSubstitute,rb.transform.localScale.magnitude) * 0.03f);
+                    rb.velocity = velocity;
+                    jumpParticles.Play();
+                    numJumps -= 1f;
                 }
             }
-            jumpsIndex += 1;
-        }
-        int emptyJumpsIndex = 0;
-        foreach (GameObject obj in jumpsEmptyObjects) {
-            if (obj != null) {
-                if (jumpsAllowed <= emptyJumpsIndex) {
-                    obj.SetActive(false);
-                } else {
-                    obj.SetActive(true);
+
+            int jumpsIndex = 0;
+            foreach (GameObject obj in jumpsFullObjects) {
+                if (obj != null) {
+                    if (numJumps <= jumpsIndex) {
+                        obj.SetActive(false);
+                    } else {
+                        obj.SetActive(true);
+                    }
+                    if (jumpsAllowed <= jumpsIndex) {
+                        obj.SetActive(false);
+                    }
+                }
+                jumpsIndex += 1;
+            }
+            int emptyJumpsIndex = 0;
+            foreach (GameObject obj in jumpsEmptyObjects) {
+                if (obj != null) {
+                    if (jumpsAllowed <= emptyJumpsIndex) {
+                        obj.SetActive(false);
+                    } else {
+                        obj.SetActive(true);
+                    }
+                }
+                emptyJumpsIndex += 1;
+            }
+
+            
+
+
+
+            if (Input.GetKeyDown(KeyCode.UpArrow) && numDashes > 0f) {
+                if (rb != null) {
+                    audioSource.PlayOneShot(soundEffectDash);
+                    cameraMovement camScript = cameraObject.GetComponent<cameraMovement>();
+                    float direction = camScript.currentRotation;
+                    Vector3 vecDirection = new Vector3((float)Math.Sin((direction/360.0) * (2 * Math.PI)),0,(float)Math.Cos((direction/360.0) * (2 * Math.PI)));
+                    Vector3 velocity = 4.0f * vecDirection * dashVelocity * (10f + rb.transform.localScale.magnitude) * 0.03f;
+                    rb.velocity = velocity;
+                    dashParticlesObject.transform.rotation = Quaternion.LookRotation(-vecDirection);
+                    dashParticles.Play();
+                    numDashes -= 1f;
                 }
             }
-            emptyJumpsIndex += 1;
-        }
-
-        
-
-
-
-        if (Input.GetKeyDown(KeyCode.UpArrow) && numDashes > 0f) {
-            if (rb != null) {
-                audioSource.PlayOneShot(soundEffectDash);
-                cameraMovement camScript = cameraObject.GetComponent<cameraMovement>();
-                float direction = camScript.currentRotation;
-                Vector3 vecDirection = new Vector3((float)Math.Sin((direction/360.0) * (2 * Math.PI)),0,(float)Math.Cos((direction/360.0) * (2 * Math.PI)));
-                Vector3 velocity = 4.0f * vecDirection * dashVelocity * (10f + rb.transform.localScale.magnitude) * 0.03f;
-                rb.velocity = velocity;
-                dashParticlesObject.transform.rotation = Quaternion.LookRotation(-vecDirection);
-                dashParticles.Play();
-                numDashes -= 1f;
-            }
-        }
-        int dashesIndex = 0;
-        foreach (GameObject obj in dashesFullObjects) {
-            if (obj != null) {
-                if (numDashes <= dashesIndex) {
-                    obj.SetActive(false);
-                } else {
-                    obj.SetActive(true);
+            int dashesIndex = 0;
+            foreach (GameObject obj in dashesFullObjects) {
+                if (obj != null) {
+                    if (numDashes <= dashesIndex) {
+                        obj.SetActive(false);
+                    } else {
+                        obj.SetActive(true);
+                    }
+                    if (dashesAllowed <= dashesIndex) {
+                        obj.SetActive(false);
+                    }
                 }
-                if (dashesAllowed <= dashesIndex) {
-                    obj.SetActive(false);
-                }
+                dashesIndex += 1;
             }
-            dashesIndex += 1;
-        }
-        int emptyDashesIndex = 0;
-        foreach (GameObject obj in dashesEmptyObjects) {
-            if (obj != null) {
-                if (dashesAllowed <= emptyDashesIndex) {
-                    obj.SetActive(false);
-                } else {
-                    obj.SetActive(true);
+            int emptyDashesIndex = 0;
+            foreach (GameObject obj in dashesEmptyObjects) {
+                if (obj != null) {
+                    if (dashesAllowed <= emptyDashesIndex) {
+                        obj.SetActive(false);
+                    } else {
+                        obj.SetActive(true);
+                    }
+                }
+                emptyDashesIndex += 1;
+            }
+
+
+
+
+            if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                if (rb != null) {
+                    audioSource.PlayOneShot(soundEffectPound);
+                    Vector3 vecDirection = new Vector3(0,-1, 0);
+                    Vector3 velocity = 4.0f * vecDirection * dashVelocity * 1.2f * (10f + rb.transform.localScale.magnitude) * 0.03f;
+                    poundParticles.Play();
+                    rb.velocity = velocity;
                 }
             }
-            emptyDashesIndex += 1;
-        }
 
 
 
 
-        if (Input.GetKeyDown(KeyCode.DownArrow)) {
-            if (rb != null) {
-                audioSource.PlayOneShot(soundEffectPound);
-                Vector3 vecDirection = new Vector3(0,-1, 0);
-                Vector3 velocity = 4.0f * vecDirection * dashVelocity * 1.2f * (10f + rb.transform.localScale.magnitude) * 0.03f;
-                poundParticles.Play();
-                rb.velocity = velocity;
+
+
+
+
+            if (terrainData != null)
+            {
+                Vector3 ballPosition = transform.position;
+
+                // Get the terrain's local coordinates
+                float relativeX = (ballPosition.x - terrainPosition.x) / terrainData.size.x;
+                float relativeZ = (ballPosition.z - terrainPosition.z) / terrainData.size.z;
+
+                // Get the corresponding texture index
+                terrainLayerIndex = GetTerrainLayerAtPosition(relativeX, relativeZ);
+
+                // Debug.Log("Current Terrain Layer Index: " + terrainLayerIndex);
             }
-        }
-
-
-
-
-
-
-
-
-        if (terrainData != null)
-        {
-            Vector3 ballPosition = transform.position;
-
-            // Get the terrain's local coordinates
-            float relativeX = (ballPosition.x - terrainPosition.x) / terrainData.size.x;
-            float relativeZ = (ballPosition.z - terrainPosition.z) / terrainData.size.z;
-
-            // Get the corresponding texture index
-            terrainLayerIndex = GetTerrainLayerAtPosition(relativeX, relativeZ);
-
-            // Debug.Log("Current Terrain Layer Index: " + terrainLayerIndex);
         }
     }
 
     private void FixedUpdate() {
+        if (view.IsMine) {
 
-        rb.AddForce(Physics.gravity * gravityMultiplier, ForceMode.Acceleration);
+            rb.AddForce(Physics.gravity * gravityMultiplier, ForceMode.Acceleration);
 
-        if (touchGObject != null) {
-            touchingGround tgScript = touchGObject.GetComponent<touchingGround>();
-            cameraMovement camScript = cameraObject.GetComponent<cameraMovement>();
-            if (tgScript != null) {
-                camScript.camDistance = 10.0f + rb.transform.localScale.magnitude * camDistScale;
-                camScript.cameraHeightOffset = camScript.camDistance * (4.553655f/10.0f);
-                if (tgScript.isGrounded) {
-                    numJumps += Time.deltaTime * jumpRecharge;
-                    numJumps = Mathf.Min(jumpsAllowed - 0.9f,numJumps);
-                    numDashes += Time.deltaTime * dashRecharge;
-                    numDashes = Mathf.Min(dashesAllowed - 0.9f,numDashes);
+            if (touchGObject != null) {
+                touchingGround tgScript = touchGObject.GetComponent<touchingGround>();
+                cameraMovement camScript = cameraObject.GetComponent<cameraMovement>();
+                if (tgScript != null) {
+                    camScript.camDistance = 10.0f + rb.transform.localScale.magnitude * camDistScale;
+                    camScript.cameraHeightOffset = camScript.camDistance * (4.553655f/10.0f);
+                    if (tgScript.isGrounded) {
+                        numJumps += Time.deltaTime * jumpRecharge;
+                        numJumps = Mathf.Min(jumpsAllowed - 0.9f,numJumps);
+                        numDashes += Time.deltaTime * dashRecharge;
+                        numDashes = Mathf.Min(dashesAllowed - 0.9f,numDashes);
 
-                    float direction = camScript.currentRotation;
-                    Vector3 vecDirection = new Vector3((float)Math.Sin((direction/360.0) * (2 * Math.PI)),0,(float)Math.Cos((direction/360.0) * (2 * Math.PI)));
-                    rb.AddForce(vecDirection * baseAcceleration, ForceMode.Acceleration);
+                        float direction = camScript.currentRotation;
+                        Vector3 vecDirection = new Vector3((float)Math.Sin((direction/360.0) * (2 * Math.PI)),0,(float)Math.Cos((direction/360.0) * (2 * Math.PI)));
+                        rb.AddForce(vecDirection * baseAcceleration, ForceMode.Acceleration);
 
-                    // rb.AddForce((float)(Time.deltaTime * forceMagnitude * (Mathf.Pow(rb.mass,3)) * Input.GetAxis("Vertical") * Math.Sin((direction/360.0) * (2 * Math.PI))),0,(float)(Time.deltaTime * (forceMagnitude * (Mathf.Pow(rb.mass,3))) * Input.GetAxis("Vertical") * Math.Cos((direction/360.0) * (2 * Math.PI))));
-                    speed = rb.velocity.magnitude;
-                    scaleIncrease = speed * growthFactor * Time.deltaTime;
+                        // rb.AddForce((float)(Time.deltaTime * forceMagnitude * (Mathf.Pow(rb.mass,3)) * Input.GetAxis("Vertical") * Math.Sin((direction/360.0) * (2 * Math.PI))),0,(float)(Time.deltaTime * (forceMagnitude * (Mathf.Pow(rb.mass,3))) * Input.GetAxis("Vertical") * Math.Cos((direction/360.0) * (2 * Math.PI))));
+                        speed = rb.velocity.magnitude;
+                        scaleIncrease = speed * growthFactor * Time.deltaTime;
+                        newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
+                        newScale = Vector3.Min(newScale, Vector3.one * maxScale);
+                        rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
+                        rb.transform.localScale = newScale;
+                        forceMagnitude = normalForceMag;
+
+                        // if (tgScript.onSnow || terrainLayerIndex == 1 || terrainLayerIndex == 2) {
+                            
+                        // } else {
+                        //     speed = rb.velocity.magnitude;
+                        //     scaleIncrease = -speed * growthFactor * 2.5f * Time.deltaTime;
+                        //     newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
+                        //     newScale = Vector3.Max(newScale, Vector3.one * minScale);
+                        //     rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
+                        //     rb.transform.localScale = newScale;
+                        // }
+
+                        // if (terrainLayerIndex == 2) {
+                        //     forceMagnitude = speedyForceMag;
+                        // } else {
+                        //     forceMagnitude = normalForceMag;
+                        // }
+                    }
+                    scaleIncrease = -growthFactor * 3f * Time.deltaTime;
                     newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
-                    newScale = Vector3.Min(newScale, Vector3.one * maxScale);
+                    newScale = Vector3.Max(newScale, Vector3.one * minScale);
                     rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
                     rb.transform.localScale = newScale;
-                    forceMagnitude = normalForceMag;
-
-                    // if (tgScript.onSnow || terrainLayerIndex == 1 || terrainLayerIndex == 2) {
-                        
-                    // } else {
-                    //     speed = rb.velocity.magnitude;
-                    //     scaleIncrease = -speed * growthFactor * 2.5f * Time.deltaTime;
-                    //     newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
-                    //     newScale = Vector3.Max(newScale, Vector3.one * minScale);
-                    //     rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
-                    //     rb.transform.localScale = newScale;
-                    // }
-
-                    // if (terrainLayerIndex == 2) {
-                    //     forceMagnitude = speedyForceMag;
-                    // } else {
-                    //     forceMagnitude = normalForceMag;
-                    // }
                 }
-                scaleIncrease = -growthFactor * 3f * Time.deltaTime;
-                newScale = rb.transform.localScale + Vector3.one * scaleIncrease;
-                newScale = Vector3.Max(newScale, Vector3.one * minScale);
-                rb.mass = baseMass + massScaling * Mathf.Pow(newScale.magnitude, 3);
-                rb.transform.localScale = newScale;
             }
-        }
-        if (rb.transform.localScale.magnitude <= (Vector3.one * minScale).magnitude) {
-            StartCoroutine(EmitParticlesAndReset());
+            if (rb.transform.localScale.magnitude <= (Vector3.one * minScale).magnitude) {
+                StartCoroutine(EmitParticlesAndReset());
+            }
         }
     }
 
