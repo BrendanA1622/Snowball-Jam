@@ -71,6 +71,7 @@
     <Compile Include="Assets\NetworkController.cs" />
     <Compile Include="Assets\followBallPos.cs" />
     <Compile Include="Assets\DisplayNotification.cs" />
+    <Compile Include="Assets\PlayerCanvasManager.cs" />
     <Compile Include="Assets\touchingGround.cs" />
     <Compile Include="Assets\changeVolume.cs" />
     <Compile Include="Assets\CollectCube.cs" />
