@@ -15,7 +15,6 @@ public class EnemySimpleMovement : MonoBehaviour
     [SerializeField] GameObject otherEnemy7;
     [SerializeField] GameObject otherEnemy8;
     [SerializeField] GameObject otherEnemy9;
-    [SerializeField] GameObject originalBallObject;
     [SerializeField] GameObject ballObject;
     [SerializeField] GameObject ballObjectGhost;
 
@@ -46,8 +45,7 @@ public class EnemySimpleMovement : MonoBehaviour
     private float speed;
     private float scaleIncrease;
     private Vector3 newScale;
-
-    [SerializeField] Leaderboard leaderboard;
+    private Leaderboard leaderboard;
     [SerializeField] int playerIndex;
 
 
@@ -55,6 +53,22 @@ public class EnemySimpleMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        GameObject leaderboardObject = GameObject.Find("LeaderboardLabel");
+        if (leaderboardObject != null)
+        {
+            leaderboard = leaderboardObject.GetComponent<Leaderboard>();
+            if (leaderboard != null)
+            {
+                Debug.Log("Leaderboard component found!");
+            }
+            else
+            {
+                Debug.LogWarning("Leaderboard component not found on LeaderboardLabel.");
+            }
+        }
+
+
         startPosition = transform.localPosition;
         transform.localPosition = startPosition;
         transform.localScale = startScale;
@@ -95,7 +109,6 @@ public class EnemySimpleMovement : MonoBehaviour
             EnemyTG tgScript = touchGObject.GetComponent<EnemyTG>();
             if (tgScript != null) {
                 if (tgScript.isGrounded) {
-                    Vector3 directionToBall = originalBallObject.transform.position - transform.position;
                     Vector3 directionToEnemy = otherEnemy.transform.position - transform.position;
                     Vector3 directionToEnemy2 = otherEnemy2.transform.position - transform.position;
                     Vector3 directionToEnemy3 = otherEnemy3.transform.position - transform.position;
@@ -105,7 +118,6 @@ public class EnemySimpleMovement : MonoBehaviour
                     Vector3 directionToEnemy7 = otherEnemy7.transform.position - transform.position;
                     Vector3 directionToEnemy8 = otherEnemy8.transform.position - transform.position;
                     Vector3 directionToEnemy9 = otherEnemy9.transform.position - transform.position;
-                    directionToBall.y = 0;
                     directionToEnemy.y = 0;
                     directionToEnemy2.y = 0;
                     directionToEnemy3.y = 0;
@@ -116,10 +128,8 @@ public class EnemySimpleMovement : MonoBehaviour
                     directionToEnemy8.y = 0;
                     directionToEnemy9.y = 0;
                     float direction;
-                    float shortestLength = Mathf.Min(directionToBall.magnitude, directionToEnemy.magnitude, directionToEnemy2.magnitude, directionToEnemy3.magnitude, directionToEnemy4.magnitude);
-                    if (shortestLength == directionToBall.magnitude) {
-                        direction = Vector3.SignedAngle(Vector3.forward, directionToBall, Vector3.up) + 180.0f;
-                    } else if (shortestLength == directionToEnemy.magnitude) {
+                    float shortestLength = Mathf.Min(directionToEnemy.magnitude, directionToEnemy2.magnitude, directionToEnemy3.magnitude, directionToEnemy4.magnitude);
+                    if (shortestLength == directionToEnemy.magnitude) {
                         direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy, Vector3.up) + 180.0f;
                     } else if (shortestLength == directionToEnemy2.magnitude) {
                         direction = Vector3.SignedAngle(Vector3.forward, directionToEnemy2, Vector3.up) + 180.0f;

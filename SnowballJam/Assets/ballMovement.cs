@@ -42,7 +42,8 @@ public class ballMovement : MonoBehaviour
     public float massScaling;
 
 
-    public Terrain terrain; // Assign the terrain in the Inspector
+    private Terrain terrain; // Assign the terrain in the Inspector
+    
     private TerrainData terrainData;
     private Vector3 terrainPosition;
     public int terrainLayerIndex = 0;
@@ -72,7 +73,8 @@ public class ballMovement : MonoBehaviour
     private float score = 0.0f;
     private float highScore = 0.0f;
     public float maxRBSubstitute = 40.0f;
-    [SerializeField] Leaderboard leaderboard;
+    
+    private Leaderboard leaderboard;
 
     public AudioSource audioSource; // Reference to AudioSource
     public AudioClip soundEffectDash;
@@ -87,6 +89,27 @@ public class ballMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameObject leaderboardObject = GameObject.Find("LeaderboardLabel");
+        if (leaderboardObject != null)
+        {
+            leaderboard = leaderboardObject.GetComponent<Leaderboard>();
+            if (leaderboard != null)
+            {
+                Debug.Log("Leaderboard component found!");
+            }
+            else
+            {
+                Debug.LogWarning("Leaderboard component not found on LeaderboardLabel.");
+            }
+        }
+
+        GameObject terrainObject = GameObject.Find("SmallTerrain");
+        if (terrainObject != null)
+        {
+            terrain = terrainObject.GetComponent<Terrain>();
+        }
+
+
         startPosition = transform.position;
         startScale = transform.localScale;
         if (terrain != null)
