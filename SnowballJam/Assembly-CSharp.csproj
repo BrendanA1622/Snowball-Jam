@@ -77,6 +77,7 @@
     <Compile Include="Assets\CollectCube.cs" />
     <Compile Include="Assets\ballMovement.cs" />
     <Compile Include="Assets\cameraMovement.cs" />
+    <Compile Include="Assets\SpawnPlayers.cs" />
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\SmoothCameraTransition.cs" />
     <Compile Include="Assets\gainingParticles.cs" />
