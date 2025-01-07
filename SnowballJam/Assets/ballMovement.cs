@@ -277,6 +277,8 @@ public class ballMovement : MonoBehaviour
 
                 // Debug.Log("Current Terrain Layer Index: " + terrainLayerIndex);
             }
+        } else {
+            rb.isKinematic = true;
         }
     }
 
