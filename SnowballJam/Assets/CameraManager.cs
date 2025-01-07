@@ -33,14 +33,14 @@ public class CameraManager : MonoBehaviourPunCallbacks
                 {
                     // Enable the local player's AudioListener
                     cam.SetActive(true);
-                    Debug.Log("is mine!!");
+                    // Debug.Log("is mine!!");
                     // Debug.Log("Enabled AudioListener on local player: " + listener.gameObject.name);
                 }
                 else
                 {
                     // Disable other players' AudioListeners
                     cam.SetActive(false);
-                    Debug.Log("not mine!!");
+                    // Debug.Log("not mine!!");
                     // Debug.Log("Disabled AudioListener on remote player: " + listener.gameObject.name);
                 }
             }

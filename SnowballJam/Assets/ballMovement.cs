@@ -93,6 +93,10 @@ public class ballMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // if (!GetComponent<PhotonView>().IsMine)
+        // {
+        //     rb.isKinematic = true; // Prevent physics conflicts for non-owner
+        // }
 
         view = higherPlayer.GetComponent<PhotonView>();
 
@@ -133,6 +137,14 @@ public class ballMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        foreach (PhotonView view in FindObjectsOfType<PhotonView>())
+        {
+            if (!view.IsMine)
+            {
+                Debug.Log("Found other player's object at position: " + view.transform.position);
+            }
+        }
+        
         if (view.IsMine) {
             score = rb.transform.localScale.magnitude * 100f;
             leaderboard.scores[10] = (int)score;
@@ -327,6 +339,27 @@ public class ballMovement : MonoBehaviour
             }
         }
     }
+
+    void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // Send the current state to other players
+            stream.SendNext(transform.position);
+            stream.SendNext(rb.velocity);
+            stream.SendNext(rb.mass);
+            stream.SendNext(transform.localScale);
+        }
+        else
+        {
+            // Receive state updates from other players
+            transform.position = (Vector3)stream.ReceiveNext();
+            rb.velocity = (Vector3)stream.ReceiveNext();
+            rb.mass = (float)stream.ReceiveNext();
+            transform.localScale = (Vector3)stream.ReceiveNext();
+        }
+    }
+
 
     public void increaseScale(Vector3 scaleIncrease) {
         rb.transform.localScale += scaleIncrease;
