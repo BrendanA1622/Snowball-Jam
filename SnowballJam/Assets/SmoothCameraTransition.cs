@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class SmoothCameraTransition : MonoBehaviour
 {
@@ -24,9 +25,20 @@ public class SmoothCameraTransition : MonoBehaviour
         transform.rotation = Quaternion.Euler(globTargetRotation);
     }
 
+    // public void LoadSceneByIndex(int sceneIndex)
+    // {
+    //     SceneManager.LoadScene(sceneIndex);
+    // }
+
     public void LoadSceneByIndex(int sceneIndex)
     {
-        SceneManager.LoadScene(sceneIndex);
+        // Use PhotonNetwork to load the scene across all clients in the room
+        PhotonNetwork.LoadLevel(sceneIndex);
+    }
+
+    public void LeaveRoomToGo(int sceneIndex) {
+        PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel(sceneIndex);
     }
 
     public void MoveCamera()
