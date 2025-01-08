@@ -137,13 +137,13 @@ public class ballMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach (PhotonView view in FindObjectsOfType<PhotonView>())
-        {
-            if (!view.IsMine)
-            {
-                Debug.Log("Found other player's object at position: " + view.transform.position);
-            }
-        }
+        // foreach (PhotonView view in FindObjectsOfType<PhotonView>())
+        // {
+        //     if (!view.IsMine)
+        //     {
+        //         // Debug.Log("Found other player's object at position: " + view.transform.position);
+        //     }
+        // }
         
         if (view.IsMine) {
             score = rb.transform.localScale.magnitude * 100f;
@@ -205,7 +205,7 @@ public class ballMovement : MonoBehaviour
 
 
 
-            if (Input.GetKeyDown(KeyCode.UpArrow) && numDashes > 0f) {
+            if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && numDashes > 0f) {
                 if (rb != null) {
                     audioSource.PlayOneShot(soundEffectDash);
                     cameraMovement camScript = cameraObject.GetComponent<cameraMovement>();
@@ -247,7 +247,7 @@ public class ballMovement : MonoBehaviour
 
 
 
-            if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) {
                 if (rb != null) {
                     audioSource.PlayOneShot(soundEffectPound);
                     Vector3 vecDirection = new Vector3(0,-1, 0);
