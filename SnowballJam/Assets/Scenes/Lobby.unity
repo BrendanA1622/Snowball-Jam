@@ -766,7 +766,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MAIN LOBBY
+  m_text: Hilltop Havoc
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d4a73383a7b62fe42ad54fdde1b878f3, type: 2}
   m_sharedMaterial: {fileID: 3922170800266728441, guid: d4a73383a7b62fe42ad54fdde1b878f3, type: 2}

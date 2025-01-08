@@ -7004,6 +7004,7 @@ GameObject:
   - component: {fileID: 8997309317601139573}
   - component: {fileID: 2780373487891790257}
   - component: {fileID: 1820139272921755673}
+  - component: {fileID: 3800963974358491589}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -7080,6 +7081,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b6862f62d341b84185c78af7a681e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3800963974358491589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3006590135144183132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0e6faf2ba089df4eb8fb405d7ba993e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownBall: {fileID: 5981204442071957918}
+  ownName: 
 --- !u!1 &3368214972916146839
 GameObject:
   m_ObjectHideFlags: 0
@@ -23963,6 +23978,7 @@ MonoBehaviour:
   jumpsAllowed: 1
   dashRecharge: 1
   dashesAllowed: 1
+  score: 0
   maxRBSubstitute: 40
   audioSource: {fileID: 6409529723025671192}
   soundEffectDash: {fileID: 8300000, guid: 9f4bf0e2547706641bc286c62ec78edc, type: 3}

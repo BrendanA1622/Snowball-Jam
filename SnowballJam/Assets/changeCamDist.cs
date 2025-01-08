@@ -64,7 +64,7 @@ public class changeCamDist : MonoBehaviour
         ballScript.camDistScale = 0.0f + (distSlider.value * 25.0f);
         distSlider.value = PlayerPrefs.GetFloat("camDistance");
         Load();
-        Debug.Log("dist val: " + DefaultCamDistance);
+        // Debug.Log("dist val: " + DefaultCamDistance);
     }
 
     public void ChangeCamDist() {

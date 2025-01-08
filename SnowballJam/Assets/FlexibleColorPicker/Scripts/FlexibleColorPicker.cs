@@ -281,7 +281,7 @@ public class FlexibleColorPicker : MonoBehaviour {
         {
             Debug.Log($"Skin color applied: {skinColor}");
         }
-        Debug.Log("THIS CLOR WAS SET: " + color);
+        // Debug.Log("THIS CLOR WAS SET: " + color);
     }
 
     /// <summary>

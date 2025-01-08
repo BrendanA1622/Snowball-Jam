@@ -72,7 +72,7 @@ public class ballMovement : MonoBehaviour
     public float dashRecharge = 1f;
     public float dashesAllowed = 1f;
 
-    private float score = 0.0f;
+    public float score = 0.0f;
     private float highScore = 0.0f;
     public float maxRBSubstitute = 40.0f;
     
@@ -90,6 +90,18 @@ public class ballMovement : MonoBehaviour
 
 
 
+    [PunRPC]
+    public void SendScoreToPlayer(int score)
+    {
+        Debug.Log("My score is: " + score);
+    }
+
+    public void CallSendScore(int score)
+    {
+        // Call the RPC
+        // PhotonView photonView = higherPlayer.GetComponent<PhotonView>();
+        view.RPC("SendScoreToPlayer", RpcTarget.All, score);
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -147,6 +159,11 @@ public class ballMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!view.IsMine) {
+            // PlayerData.Instance.globalScoreInt = (int)ownBall.score;
+            ballMovement playerCommunication = GetComponent<ballMovement>();
+            playerCommunication.CallSendScore((int)score);
+        }
         // foreach (PhotonView view in FindObjectsOfType<PhotonView>())
         // {
         //     if (!view.IsMine)

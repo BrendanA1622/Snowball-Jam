@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 1037
   m_ShowMode: 4
-  m_Title: Inspector
+  m_Title: Project
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 18
+  controlID: 39
   draggingID: 0
 --- !u!114 &8
 MonoBehaviour:
@@ -274,8 +274,8 @@ MonoBehaviour:
     y: 0
     width: 649
     height: 987
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 19}
@@ -600,7 +600,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 82b6fcff68bafcffcabefcff84c5fcff14cefcffd4d3fcff60ddfcff62ddfcff74e7fcff60ebfcff62ebfcffceeffcff1c21fdff1e21fdff6425fdff7661fdffb861fdfffc61fdff3e62fdff8062fdffc262fdff0463fdff6e67fdffc876fdff748cfdff7ac5fdffc8c5fdfff0c7fdff24c8fdff32c8fdff46c8fdff9c20feff1621feff6625feffa229feff3c62feff7c66feff1267feffc483feff2ad9feffd2e3feff20e4feff36e6feffdce6feff10e7feff1ee7feff32e7feffdee9feff0cebfeff18ecfeffacf0feffe0f4feff72f9feff3421ffff7e32ffff103bffffa83fffffd443ffffc644ffff004fffff2a50ffff0854ffff5654ffff6c56ffff1257ffff4657ffff5457ffff6857ffff1859ffff105affff885bffff225dffff1275ffffc8c2ffff3ad4ffffe4d5ffffc8d6ffffd0e0ffff1ee1ffff66e3ffff9ae3ffffa8e3ffffbce3ffffaee5ffffecf9ffff2afbffff828400002686000084ab000052df000012ab0100c8b6010058b90100fac1010080c80100f4cb01006ecd01009ecd0100fccd01009ad00100ccd001002ad10100
+      m_ExpandedIDs: 0209ffff120dffff360dffff3622fffffe29ffffbc4effffbe55ffff3866ffff707bffffcc7bffff007effff347effff1c81ffff3081ffffd68ffffff88fffffac95ffffce95ffffe2a6ffff06a7ffff02c2ffff96e1ffff58e6ffff5ae6ffffeef9ffff2afbffff1e6c000034da0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -993,9 +993,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 512.813, y: 258.88678, z: -15.725607}
+    m_Target: {x: -293.72498, y: -61.328644, z: 182.57544}
     speed: 2
-    m_Value: {x: 512.813, y: 258.88678, z: -15.725607}
+    m_Value: {x: -293.72498, y: -61.328644, z: 182.57544}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1041,13 +1041,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.036064457, y: -0.02466277, z: -0.0009262279, w: 0.9997}
+    m_Target: {x: 0.19390537, y: -0.1780089, z: 0.03397421, w: 0.96481293}
     speed: 2
-    m_Value: {x: 0.03604086, y: -0.024646634, z: -0.0009256219, w: 0.9990459}
+    m_Value: {x: 0.193779, y: -0.1778929, z: 0.033952072, w: 0.9641842}
   m_Size:
-    m_Target: 276.6586
+    m_Target: 552.8369
     speed: 2
-    m_Value: 276.6586
+    m_Value: 552.8369
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1151,7 +1151,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1159,16 +1159,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\brend\GithubRepository\Snowball-Jam\SnowballJam
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 485c0000
-    m_LastClickedID: 23624
-    m_ExpandedIDs: 00000000385c00003a5c00003c5c00003e5c0000405c0000425c0000485c000000ca9a3bffffff7f
+    m_SelectedIDs: 945c0000
+    m_LastClickedID: 23700
+    m_ExpandedIDs: 000000005e5c0000605c0000625c0000645c0000665c0000685c00006e5c000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1196,7 +1196,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000385c00003a5c00003c5c00003e5c0000405c0000425c0000
+    m_ExpandedIDs: 000000005e5c0000605c0000625c0000645c0000665c0000685c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1223,7 +1223,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000625e0000c6acfeff
     m_RenameOverlay:
       m_UserAcceptedRename: 0
