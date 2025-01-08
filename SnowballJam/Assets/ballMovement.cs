@@ -1,13 +1,14 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using System;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using TMPro;
-using Photon.Pun;
 
 public class ballMovement : MonoBehaviour
 {
+    [SerializeField] private Material targetMaterial;
     [SerializeField] GameObject displayObject;
     [SerializeField] private GameObject allParticles;
     [SerializeField] private ParticleSystem jumpParticles;
@@ -106,7 +107,7 @@ public class ballMovement : MonoBehaviour
             leaderboard = leaderboardObject.GetComponent<Leaderboard>();
             if (leaderboard != null)
             {
-                Debug.Log("Leaderboard component found!");
+                // Debug.Log("Leaderboard component found!");
             }
             else
             {
@@ -134,6 +135,15 @@ public class ballMovement : MonoBehaviour
         }
     }
 
+    // [PunRPC]
+    // private void SyncMaterialColor(string colorString)
+    // {
+    //     if (ColorUtility.TryParseHtmlString($"#{colorString}", out Color color))
+    //     {
+    //         objectRenderer.material.color = color;
+    //     }
+    // }
+
     // Update is called once per frame
     void Update()
     {
@@ -146,6 +156,23 @@ public class ballMovement : MonoBehaviour
         // }
         
         if (view.IsMine) {
+
+            // string colorString = PlayerPrefs.GetString("SkinColor", "#FFFFFF"); // Default to white if no color is saved
+
+            // // Convert the color string to a Color object
+            // if (ColorUtility.TryParseHtmlString(colorString, out Color skinColor))
+            // {
+            //     // Assign the color to the material
+            //     // targetMaterial.color = skinColor;
+            //     targetMaterial.SetColor("_Color", skinColor);
+            //     Debug.Log($"Skin color applied: {skinColor}");
+            // }
+
+
+
+            // Debug.Log(PlayerPrefs.GetString("SkinColor"));
+            targetMaterial.SetColor("_Color", PlayerData.Instance.SkinColor);
+
             score = rb.transform.localScale.magnitude * 100f;
             leaderboard.scores[10] = (int)score;
 
@@ -438,7 +465,10 @@ public class ballMovement : MonoBehaviour
         }
         yield return new WaitForSeconds(2.0f);
         if (!firstEndEmit) {
-            transform.localPosition = startPosition;
+            startPosition = newRandomPos();
+            higherPlayer.transform.position = startPosition;
+            transform.position = higherPlayer.transform.position;
+            Debug.Log("START POSITION: " + startPosition);
             transform.localScale = startScale;
             meshRenderer = ballObject.GetComponent<MeshRenderer>();
             meshRenderer.enabled = true;
@@ -448,6 +478,16 @@ public class ballMovement : MonoBehaviour
             firstEndEmit = true;
         }
         
+    }
+
+    public float minX;
+    public float maxX;
+    public float minZ;
+    public float maxZ;
+    public float baseY;
+
+    public Vector3 newRandomPos() {
+        return new Vector3(UnityEngine.Random.Range(minX, maxX), baseY, UnityEngine.Random.Range(minZ, maxZ));
     }
 
 

@@ -7003,6 +7003,7 @@ GameObject:
   - component: {fileID: 7388780416107209771}
   - component: {fileID: 8997309317601139573}
   - component: {fileID: 2780373487891790257}
+  - component: {fileID: 1820139272921755673}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -7019,7 +7020,7 @@ Transform:
   m_GameObject: {fileID: 3006590135144183132}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -801.85, y: -92.76, z: -152.09}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7067,6 +7068,18 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &1820139272921755673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3006590135144183132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b6862f62d341b84185c78af7a681e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3368214972916146839
 GameObject:
   m_ObjectHideFlags: 0
@@ -23895,6 +23908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f71373b95de53aa4681a7e4a2e9fd2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetMaterial: {fileID: 2100000, guid: 092a089ba08087f48a4a055e0a99d14c, type: 2}
   displayObject: {fileID: 8612708901459671181}
   allParticles: {fileID: 5916586855013351264}
   jumpParticles: {fileID: 7368093990947169270}
@@ -23957,6 +23971,11 @@ MonoBehaviour:
   soundEffectKill: {fileID: 8300000, guid: e3b9138e5f24fd44c97cbd28062d8d07, type: 3}
   soundEffectDie: {fileID: 8300000, guid: fd5815cc8546dbb45a99b1bf927ab75c, type: 3}
   higherPlayer: {fileID: 3006590135144183132}
+  minX: -900
+  maxX: -100
+  minZ: -900
+  maxZ: -100
+  baseY: 150
 --- !u!82 &6409529723025671192
 AudioSource:
   m_ObjectHideFlags: 0

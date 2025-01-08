@@ -273,7 +273,15 @@ public class FlexibleColorPicker : MonoBehaviour {
         }
 
         PlayerData.Instance.SkinColor = color;
-        // Debug.Log("THIS CLOR WAS SET: " + color);
+
+        string colorString = PlayerPrefs.GetString("SkinColor"); // Default to white if no color is saved
+
+        // Convert the color string to a Color object
+        if (ColorUtility.TryParseHtmlString(colorString, out Color skinColor))
+        {
+            Debug.Log($"Skin color applied: {skinColor}");
+        }
+        Debug.Log("THIS CLOR WAS SET: " + color);
     }
 
     /// <summary>
