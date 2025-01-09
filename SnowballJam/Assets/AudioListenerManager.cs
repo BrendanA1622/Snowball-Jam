@@ -30,18 +30,18 @@ public class AudioListenerManager : MonoBehaviourPunCallbacks
                 {
                     // Enable the local player's AudioListener
                     listener.enabled = true;
-                    Debug.Log("Enabled AudioListener on local player: " + listener.gameObject.name);
+                    // Debug.Log("Enabled AudioListener on local player: " + listener.gameObject.name);
                 }
                 else
                 {
                     // Disable other players' AudioListeners
                     listener.enabled = false;
-                    Debug.Log("Disabled AudioListener on remote player: " + listener.gameObject.name);
+                    // Debug.Log("Disabled AudioListener on remote player: " + listener.gameObject.name);
                 }
             }
             else
             {
-                Debug.LogWarning("AudioListener found without a PhotonView parent: " + listener.gameObject.name);
+                // Debug.LogWarning("AudioListener found without a PhotonView parent: " + listener.gameObject.name);
             }
         }
     }

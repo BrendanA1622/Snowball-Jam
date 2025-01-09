@@ -182,7 +182,6 @@ public class FlexibleColorPicker : MonoBehaviour {
             UpdateHex();
             typeUpdate = true;
             onColorChange.Invoke(value);
-            PlayerData.Instance.SkinColor = color;
             Debug.Log("THIS CLOR WAS SET: " + color);
         }
     }
@@ -201,7 +200,6 @@ public class FlexibleColorPicker : MonoBehaviour {
     /// Modifies starting color if FCP is not initialized.
     /// </summary>
     public void SetColor(Color color) {
-        PlayerData.Instance.SkinColor = color;
         Debug.Log("THIS CLOR WAS SET: " + color);
         this.color = color;
     }
@@ -219,7 +217,6 @@ public class FlexibleColorPicker : MonoBehaviour {
     /// Changes fcp color while maintaining its current alpha value.
     /// </summary>
     public void SetColorNoAlpha(Color color) {
-        PlayerData.Instance.SkinColor = color;
         Debug.Log("THIS CLOR WAS SET: " + color);
         color.a = this.color.a;
         this.color = color;
@@ -271,8 +268,6 @@ public class FlexibleColorPicker : MonoBehaviour {
             SeperateMaterials();
             materialsSeperated = true;
         }
-
-        PlayerData.Instance.SkinColor = color;
 
         string colorString = PlayerPrefs.GetString("SkinColor"); // Default to white if no color is saved
 

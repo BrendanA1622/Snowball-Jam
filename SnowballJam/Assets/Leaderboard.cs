@@ -219,7 +219,7 @@ public class Leaderboard : MonoBehaviour
             playingBots.Add(botNames[index]);
         }
 
-        playingBots.Add(PlayerData.Instance.PlayerName);
+        playingBots.Add("placeholderName");
 
         // Initialize random scores for the bots
         for (int i = 0; i < playingBots.Count; i++)
@@ -275,7 +275,7 @@ public class Leaderboard : MonoBehaviour
         for (int i = 0; i < placementLabels.Count; i++)
         {
             placementLabels[i].text = $"{i + 1}. {playingBots[i]} - {scores[i]}";
-            if(playingBots[i] == PlayerData.Instance.PlayerName) {
+            if(playingBots[i] == "placeholderName") {
                 placementLabels[i].color = Color.yellow;
             } else {
                 placementLabels[i].color = Color.white;

@@ -7005,6 +7005,7 @@ GameObject:
   - component: {fileID: 2780373487891790257}
   - component: {fileID: 1820139272921755673}
   - component: {fileID: 3800963974358491589}
+  - component: {fileID: 3164805744964439845}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -7095,6 +7096,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownBall: {fileID: 5981204442071957918}
   ownName: 
+--- !u!114 &3164805744964439845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3006590135144183132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2753efdf2c2e5794fa67fd894f294680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ballValue: 0
+  myBall: {fileID: 0}
 --- !u!1 &3368214972916146839
 GameObject:
   m_ObjectHideFlags: 0

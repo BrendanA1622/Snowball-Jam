@@ -70,6 +70,7 @@
     <Compile Include="Assets\Leaderboard.cs" />
     <Compile Include="Assets\MultiplayerStuff\ConnectToServer.cs" />
     <Compile Include="Assets\NetworkController.cs" />
+    <Compile Include="Assets\BallSetup.cs" />
     <Compile Include="Assets\followBallPos.cs" />
     <Compile Include="Assets\FlexibleColorPicker\Scripts\FCP_Persistence.cs" />
     <Compile Include="Assets\ResetPlayerForSpawn.cs" />
@@ -83,12 +84,10 @@
     <Compile Include="Assets\ballMovement.cs" />
     <Compile Include="Assets\CameraManager.cs" />
     <Compile Include="Assets\FlexibleColorPicker\Scripts\FlexibleColorPicker.cs" />
-    <Compile Include="Assets\UpdatePlayerName.cs" />
     <Compile Include="Assets\cameraMovement.cs" />
     <Compile Include="Assets\SpawnPlayers.cs" />
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\AudioListenerManager.cs" />
-    <Compile Include="Assets\PlayerData.cs" />
     <Compile Include="Assets\SmoothCameraTransition.cs" />
     <Compile Include="Assets\gainingParticles.cs" />
     <Compile Include="Assets\CreateAndJoinRooms.cs" />

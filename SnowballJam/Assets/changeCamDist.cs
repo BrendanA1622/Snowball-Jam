@@ -41,7 +41,7 @@ public class changeCamDist : MonoBehaviour
         }
         else
         {
-            Debug.Log($"camDistance already exists with value: {PlayerPrefs.GetFloat("camDistance")}");
+            // Debug.Log($"camDistance already exists with value: {PlayerPrefs.GetFloat("camDistance")}");
             PlayerPrefs.SetFloat("camDistance", 0.1f);
         }
 

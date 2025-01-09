@@ -26,8 +26,9 @@ public class PlayerCommunication : MonoBehaviour
     void Start()
     {
         view = GetComponent<PhotonView>();
-        ownName = PlayerData.Instance.PlayerName;
-        Debug.Log("My own name is: " + ownName);
+        ownName = "templateName";
+        // Debug.Log("My own name is: " + ownName);
+        ownBall.establishColor();
     }
 
     // Update is called once per frame

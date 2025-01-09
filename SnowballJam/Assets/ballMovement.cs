@@ -88,30 +88,74 @@ public class ballMovement : MonoBehaviour
     PhotonView view;
     public GameObject higherPlayer;
 
+    private bool colorHasBeenEstablished = false;
 
 
-    [PunRPC]
-    public void SendScoreToPlayer(int score)
-    {
-        Debug.Log("My score is: " + score);
+
+    // [PunRPC]
+    // public void SendScoreToPlayer(int score)
+    // {
+    //     Debug.Log("My score is: " + score);
+    // }
+
+    // public void CallSendScore(int score)
+    // {
+    //     // Call the RPC
+    //     // PhotonView photonView = higherPlayer.GetComponent<PhotonView>();
+    //     view.RPC("SendScoreToPlayer", RpcTarget.All, score);
+    // }
+
+    public void setColor(Vector3 vecColor) {
+        Renderer renderer = GetComponent<Renderer>();
+        Material targetMaterialInstance = new Material(targetMaterial); // Create an instance of the material
+        targetMaterialInstance.SetColor("_Color", new Color(vecColor.x, vecColor.y, vecColor.z));
+        renderer.material = targetMaterialInstance;
     }
 
-    public void CallSendScore(int score)
-    {
-        // Call the RPC
-        // PhotonView photonView = higherPlayer.GetComponent<PhotonView>();
-        view.RPC("SendScoreToPlayer", RpcTarget.All, score);
+    public void establishColor() {
+        view = higherPlayer.GetComponent<PhotonView>();
+
+        if (view.IsMine)
+        {
+            // Debug.Log("The view was mine :p");
+            // Get player properties
+            var playerData = PhotonNetwork.LocalPlayer.CustomProperties;
+            if (playerData.ContainsKey("Nickname"))
+            {
+                string nickname = (string)playerData["Nickname"];
+                gameObject.name = nickname;
+            }
+            if (playerData.ContainsKey("Color"))
+            {
+                Vector3 colorVector = (Vector3)playerData["Color"];
+
+                Renderer renderer = GetComponent<Renderer>();
+                Material targetMaterialInstance = new Material(targetMaterial); // Create an instance of the material
+                targetMaterialInstance.SetColor("_Color", new Color(colorVector.x, colorVector.y, colorVector.z));
+                renderer.material = targetMaterialInstance;
+
+                // targetMaterial.SetColor("_Color", new Color(colorVector.x, colorVector.y, colorVector.z));
+                // Debug.Log("Vector stuff I threw together: " + colorVector.x + ", " + colorVector.y + ", " + colorVector.z);
+                colorHasBeenEstablished = true;
+            } else {
+                Debug.Log("no color key :(");
+            }
+        } else {
+
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        
+        view = higherPlayer.GetComponent<PhotonView>();
+
         // if (!GetComponent<PhotonView>().IsMine)
         // {
         //     rb.isKinematic = true; // Prevent physics conflicts for non-owner
         // }
 
-        view = higherPlayer.GetComponent<PhotonView>();
 
         GameObject leaderboardObject = GameObject.Find("LeaderboardLabel");
         if (leaderboardObject != null)
@@ -159,10 +203,20 @@ public class ballMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (view.IsMine) {
+            if(!colorHasBeenEstablished) {
+                establishColor();
+            }
+        }
+        
+
+
+
+
         if (!view.IsMine) {
             // PlayerData.Instance.globalScoreInt = (int)ownBall.score;
             ballMovement playerCommunication = GetComponent<ballMovement>();
-            playerCommunication.CallSendScore((int)score);
+            // playerCommunication.CallSendScore((int)score);
         }
         // foreach (PhotonView view in FindObjectsOfType<PhotonView>())
         // {
@@ -188,7 +242,9 @@ public class ballMovement : MonoBehaviour
 
 
             // Debug.Log(PlayerPrefs.GetString("SkinColor"));
-            targetMaterial.SetColor("_Color", PlayerData.Instance.SkinColor);
+
+
+            // targetMaterial.SetColor("_Color", PlayerData.Instance.SkinColor);
 
             score = rb.transform.localScale.magnitude * 100f;
             leaderboard.scores[10] = (int)score;
@@ -485,7 +541,7 @@ public class ballMovement : MonoBehaviour
             startPosition = newRandomPos();
             higherPlayer.transform.position = startPosition;
             transform.position = higherPlayer.transform.position;
-            Debug.Log("START POSITION: " + startPosition);
+            // Debug.Log("START POSITION: " + startPosition);
             transform.localScale = startScale;
             meshRenderer = ballObject.GetComponent<MeshRenderer>();
             meshRenderer.enabled = true;
