@@ -5,24 +5,128 @@ using Photon.Pun;
 
 public class BallSetup : MonoBehaviour
 {
+    [SerializeField] private Material targetMaterial;
     private PhotonView PV;
     public int ballValue;
     public ballMovement myBall;
 
+    
+    private Leaderboard leaderboard;
+    private bool canUpdateNow = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        
+        GameObject leaderboardObject = GameObject.Find("LeaderboardLabel");
+        leaderboard = leaderboardObject.GetComponent<Leaderboard>();
+        // gameObject.name = "NewObjectName";
         PV = GetComponent<PhotonView>();
         if (PV.IsMine) {
-            PV.RPC("updateMatColor", RpcTarget.AllBuffered, new Vector3(0.5f,1.0f,0.5f));
-            Debug.Log("WORKING ON THIS");
+
+            var playerData = PhotonNetwork.LocalPlayer.CustomProperties;
+            string nickname = "error";
+            Vector3 colorVector = new Vector3(0,0,0);
+            if (playerData.ContainsKey("Nickname")) {
+                nickname = (string)playerData["Nickname"];
+            }
+            if (playerData.ContainsKey("Color"))
+            {
+                colorVector = (Vector3)playerData["Color"];
+
+                // Renderer renderer = GetComponent<Renderer>();
+                // Material targetMaterialInstance = new Material(targetMaterial); // Create an instance of the material
+                // targetMaterialInstance.SetColor("_Color", new Color(colorVector.x, colorVector.y, colorVector.z));
+                // renderer.material = targetMaterialInstance;
+            }
+
+            PV.RPC("RPC_sendMessage", RpcTarget.AllBuffered, nickname);
+            PV.RPC("RPC_updateMat", RpcTarget.AllBuffered, colorVector);
+            leaderboard.setImportantName(gameObject.name);
+            canUpdateNow = true;
+        } else {
+            canUpdateNow = true;
+        }
+
+        
+    }
+
+    void Update() {
+        if(canUpdateNow) {
+            if (PV.IsMine) {
+                PV.RPC("RPC_updateScore", RpcTarget.All, gameObject.name, (int)myBall.score);
+            }
+        }
+        
+    }
+
+
+    [PunRPC]
+    void RPC_updateScore(string playerName, int score) {
+        // Debug.Log(playerName + "   scores: " + score);
+        if(canUpdateNow) {
+            Debug.Log(playerName + " is making here");
+            leaderboard.setPlayerScore(playerName, score);
         }
     }
 
+
+
     [PunRPC]
-    void updateMatColor(Vector3 vecColor) {
-        if(myBall) {
-            myBall.setColor(vecColor);
+    void RPC_sendMessage(string message) {
+        Debug.Log("My name is: " + message);
+        gameObject.name = message;
+    }
+
+
+    [PunRPC]
+    void RPC_updateMat(Vector3 colorOfInterest) {
+        // Debug.Log("My color is: " + colorOfInterest);
+        // Renderer renderer = myBall.GetComponent<Renderer>();
+        // Material targetMaterialInstance = new Material(targetMaterial); // Create an instance of the material
+        // targetMaterialInstance.SetColor("_Color", new Color(colorOfInterest.x, colorOfInterest.y, colorOfInterest.z));
+        // renderer.material = targetMaterialInstance;
+
+
+        if (myBall == null)
+        {
+            Debug.LogError("myBall is not assigned!");
+            return;
+        }
+
+        Renderer renderer = myBall.GetComponent<Renderer>();
+        if (renderer == null)
+        {
+            Debug.LogError("Renderer not found on myBall!");
+            return;
+        }
+
+        // Ensure targetMaterial is assigned
+        if (targetMaterial == null)
+        {
+            Debug.LogError("targetMaterial is not assigned!");
+            return;
+        }
+
+        // Use a new material instance only if necessary
+        Material materialInstance = renderer.material; // This creates a unique instance for the GameObject if not already
+        if (materialInstance != null)
+        {
+            Color newColor = new Color(colorOfInterest.x, colorOfInterest.y, colorOfInterest.z);
+            if (materialInstance.HasProperty("_Color")) // Check if the property exists
+            {
+                materialInstance.SetColor("_Color", newColor);
+                Debug.Log("Updated material color to: " + newColor);
+            }
+            else
+            {
+                Debug.LogError("_Color property not found in the material!");
+            }
+        }
+        else
+        {
+            Debug.LogError("Failed to create or access material instance.");
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UIElements;
 
 public class Leaderboard : MonoBehaviour
 {
@@ -130,70 +131,7 @@ public class Leaderboard : MonoBehaviour
     private List<string> playingBots = new List<string>() {};
     private List<string> originalNames = new List<string>(); // Optional if needed later
     public bool leaderboardNeedsUpdate = true;
-
-    // private void Start() {
-    //     int randomEnNumber1 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-    //     int randomEnNumber2 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-    //     int randomEnNumber3 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-    //     int randomEnNumber4 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-    //     int randomEnNumber5 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-    //     int randomEnNumber6 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-    //     int randomEnNumber7 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-    //     int randomEnNumber8 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-    //     int randomEnNumber9 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-    //     int randomEnNumber10 = (int)UnityEngine.Random.Range(0.0f,117.0f);
-
-    //     playingBots.Add(botNames[randomEnNumber1]);
-    //     playingBots.Add(botNames[randomEnNumber2]);
-    //     playingBots.Add(botNames[randomEnNumber3]);
-    //     playingBots.Add(botNames[randomEnNumber4]);
-    //     playingBots.Add(botNames[randomEnNumber5]);
-    //     playingBots.Add(botNames[randomEnNumber6]);
-    //     playingBots.Add(botNames[randomEnNumber7]);
-    //     playingBots.Add(botNames[randomEnNumber8]);
-    //     playingBots.Add(botNames[randomEnNumber9]);
-    //     playingBots.Add(botNames[randomEnNumber10]);
-
-    //     List<string> originalNames = playingBots;
-
-
-    //     // Combine enemy names and scores into a list of pairs
-    //     List<KeyValuePair<string, int>> pairedList = new List<KeyValuePair<string, int>>();
-
-    //     for (int i = 0; i < playingBots.Count; i++)
-    //     {
-    //         pairedList.Add(new KeyValuePair<string, int>(playingBots[i], scores[i]));
-    //     }
-
-    //     // Sort the list by scores in descending order
-    //     pairedList.Sort((pair1, pair2) => pair2.Value.CompareTo(pair1.Value));
-
-    //     // Update the original lists with sorted data
-    //     playingBots = pairedList.Select(pair => pair.Key).ToList();
-    //     scores = pairedList.Select(pair => pair.Value).ToList();
-    // }
-
-    // private void Update() {
-    //     List<KeyValuePair<string, int>> pairedList = new List<KeyValuePair<string, int>>();
-
-    //     for (int i = 0; i < playingBots.Count; i++)
-    //     {
-    //         pairedList.Add(new KeyValuePair<string, int>(playingBots[i], scores[i]));
-    //     }
-
-    //     // Sort the list by scores in descending order
-    //     pairedList.Sort((pair1, pair2) => pair2.Value.CompareTo(pair1.Value));
-
-    //     // Update the original lists with sorted data
-    //     playingBots = pairedList.Select(pair => pair.Key).ToList();
-    //     scores = pairedList.Select(pair => pair.Value).ToList();
-
-    //     int placeIndex = 0;
-    //     foreach(TextMeshProUGUI place in placementLabels) {
-    //         place.text = $"{placeIndex + 1}. {playingBots[placeIndex]} - {scores[placeIndex]}";
-    //         placeIndex += 1;
-    //     }
-    // }
+    private string importantName = "";
 
     public List<int> scores = new List<int>()
     {
@@ -219,7 +157,7 @@ public class Leaderboard : MonoBehaviour
             playingBots.Add(botNames[index]);
         }
 
-        playingBots.Add("placeholderName");
+        // playingBots.Add("placeholderName");
 
         // Initialize random scores for the bots
         for (int i = 0; i < playingBots.Count; i++)
@@ -235,7 +173,7 @@ public class Leaderboard : MonoBehaviour
 
     }
 
-    private float updateInterval = 3.0f;
+    private float updateInterval = 1.0f;
     private float timer = 2.8f;
     private void Update()
     {
@@ -275,7 +213,8 @@ public class Leaderboard : MonoBehaviour
         for (int i = 0; i < placementLabels.Count; i++)
         {
             placementLabels[i].text = $"{i + 1}. {playingBots[i]} - {scores[i]}";
-            if(playingBots[i] == "placeholderName") {
+            Debug.Log("the string: " + playingBots[i] +"     and the string: " + importantName + "   give the bool: " + playingBots[i].Equals(importantName));
+            if (playingBots[i].Equals(importantName)) {
                 placementLabels[i].color = Color.yellow;
             } else {
                 placementLabels[i].color = Color.white;
@@ -292,5 +231,25 @@ public class Leaderboard : MonoBehaviour
             scores[index] = newScore;
             leaderboardNeedsUpdate = true; // Mark leaderboard for update
         }
+    }
+
+    public void setImportantName(string impnm) {
+        importantName = impnm;
+    }
+
+    public void setPlayerScore(string playerName, int score) {
+        int index = playingBots.IndexOf(playerName);
+
+        if (index >= 0)
+        {
+            scores[index] = score;
+        }
+        else
+        {
+            playingBots.Add(playerName);
+            originalNames.Add(playerName);
+            scores.Add(score);
+        }
+        // leaderboardNeedsUpdate = true;
     }
 }

@@ -71,6 +71,7 @@
     <Compile Include="Assets\MultiplayerStuff\ConnectToServer.cs" />
     <Compile Include="Assets\NetworkController.cs" />
     <Compile Include="Assets\BallSetup.cs" />
+    <Compile Include="Assets\DoNotRotate.cs" />
     <Compile Include="Assets\followBallPos.cs" />
     <Compile Include="Assets\FlexibleColorPicker\Scripts\FCP_Persistence.cs" />
     <Compile Include="Assets\ResetPlayerForSpawn.cs" />

@@ -15751,7 +15751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa93d42c58153bf409d6e7cda0b5dcbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 3006590135144183132, guid: 522490ef93e9a8945be19971b044f4e0, type: 3}
+  playerPrefab: {fileID: 2404816433194131074, guid: fcd9b1c5ad76ab0459bdbcbbf5fdea4d, type: 3}
   minX: -900
   maxX: -100
   minZ: -900

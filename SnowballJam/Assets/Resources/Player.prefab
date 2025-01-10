@@ -7108,8 +7108,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2753efdf2c2e5794fa67fd894f294680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetMaterial: {fileID: 2100000, guid: 092a089ba08087f48a4a055e0a99d14c, type: 2}
   ballValue: 0
-  myBall: {fileID: 0}
+  myBall: {fileID: 5981204442071957918}
 --- !u!1 &3368214972916146839
 GameObject:
   m_ObjectHideFlags: 0

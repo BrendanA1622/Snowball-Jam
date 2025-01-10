@@ -39,6 +39,9 @@ MonoBehaviour:
   - SendMessageToPlayer
   - SendScoreToPlayer
   - updateMatColor
+  - RPC_sendMessage
+  - RPC_updateMat
+  - RPC_updateScore
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
