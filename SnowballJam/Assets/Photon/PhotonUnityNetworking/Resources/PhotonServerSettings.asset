@@ -42,6 +42,7 @@ MonoBehaviour:
   - RPC_sendMessage
   - RPC_updateMat
   - RPC_updateScore
+  - RPC_thisPlayerDead
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

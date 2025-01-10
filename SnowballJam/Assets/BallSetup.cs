@@ -61,12 +61,23 @@ public class BallSetup : MonoBehaviour
         
     }
 
+    [PunRPC]
+    void RPC_thisPlayerDead(string playerName) {
+        Debug.Log("Sholda killed: " + playerName);
+
+    }
+
+    [PunRPC]
+    void RPC_giveUpgrade(string playerName) {
+        Debug.Log("Shoulda upgraded: " + playerName);
+    }
+
 
     [PunRPC]
     void RPC_updateScore(string playerName, int score) {
         // Debug.Log(playerName + "   scores: " + score);
         if(canUpdateNow) {
-            Debug.Log(playerName + " is making here");
+            // Debug.Log(playerName + " is making here");
             leaderboard.setPlayerScore(playerName, score);
         }
     }

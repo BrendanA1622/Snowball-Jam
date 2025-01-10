@@ -47,26 +47,6 @@ public class gainingParticles : MonoBehaviour
                     emissionModule.enabled = true;
 
                     emissionModuleDown.enabled = false;
-
-                    // if (tgScript.onSnow || ballScript.terrainLayerIndex == 1 || ballScript.terrainLayerIndex == 2) {
-                    //     float speed = ballRigidBody.velocity.magnitude;
-                        
-                    //     rateOverTime.constant = emissionRate * speed;
-                    //     emissionModule.rateOverTime = rateOverTime;
-                    //     actualParticlesUpObject.transform.localScale = ballRigidBody.transform.localScale;
-                    //     emissionModule.enabled = true;
-
-                    //     emissionModuleDown.enabled = false;
-                    // } else {
-                    //     float speed = ballRigidBody.velocity.magnitude;
-
-                    //     rateOverTimeDown.constant = emissionRateDown * speed;
-                    //     emissionModuleDown.rateOverTime = rateOverTimeDown;
-                    //     emissionModuleDown.enabled = true;
-
-                    //     emissionModule.enabled = false;
-                    // }
-                    // Debug.Log(ballScript.terrainLayerIndex);
                 } else {
                     emissionModule.enabled = false;
                     emissionModuleDown.enabled = false;

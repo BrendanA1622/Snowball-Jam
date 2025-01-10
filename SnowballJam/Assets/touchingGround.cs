@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class touchingGround : MonoBehaviour
 {
+    private PhotonView PV;
 
     [SerializeField] GameObject groundedDisplay;
     [SerializeField] GameObject ballObject;
@@ -12,8 +14,11 @@ public class touchingGround : MonoBehaviour
     MeshRenderer meshRenderer;
 
     private void Start() {
+        PV = ballObject.GetComponent<PhotonView>();
         meshRenderer = groundedDisplay.GetComponent<MeshRenderer>();
     }
+
+    
 
     private void OnTriggerStay(Collider other) {
         if (other.tag == "Enemy") {
@@ -40,6 +45,11 @@ public class touchingGround : MonoBehaviour
                 if (other.transform.localScale.magnitude - 1.5f >= ballObject.transform.localScale.magnitude) {
                     ballMovement ballScript = ballObject.GetComponent<ballMovement>();
                     ballScript.KillPlayer();
+                    if (PV.IsMine) {
+                        PV.RPC("RPC_thisPlayerDead", RpcTarget.AllBuffered, ballObject.name);
+                        PV.RPC("RPC_giveUpgrade", RpcTarget.AllBuffered, other.name);
+                    }
+
                 // } else if (other.transform.localScale.magnitude + 0.1f <= ballObject.transform.localScale.magnitude) {
                 //     if (other.GetComponent<EnemySimpleMovement>()) {
                 //         ballMovement ballScript = ballObject.GetComponent<ballMovement>();

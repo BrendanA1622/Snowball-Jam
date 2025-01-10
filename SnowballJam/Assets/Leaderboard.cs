@@ -213,7 +213,7 @@ public class Leaderboard : MonoBehaviour
         for (int i = 0; i < placementLabels.Count; i++)
         {
             placementLabels[i].text = $"{i + 1}. {playingBots[i]} - {scores[i]}";
-            Debug.Log("the string: " + playingBots[i] +"     and the string: " + importantName + "   give the bool: " + playingBots[i].Equals(importantName));
+            // Debug.Log("the string: " + playingBots[i] +"     and the string: " + importantName + "   give the bool: " + playingBots[i].Equals(importantName));
             if (playingBots[i].Equals(importantName)) {
                 placementLabels[i].color = Color.yellow;
             } else {
