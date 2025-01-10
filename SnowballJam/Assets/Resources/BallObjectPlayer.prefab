@@ -30758,15 +30758,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22aa6ce47a767e3499a41379b76f7b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ballActualObject: {fileID: 2404816433194131074}
   ballObject: {fileID: 2723858893606215912}
   camScript: {fileID: 3847082247436427679}
   gameUIElements: {fileID: 5328378801532916426}
   menuUIElements: {fileID: 7828896611250363846}
   cameraScript: {fileID: 3847082247436427679}
-  targetTransform: {fileID: 4590440494088206145}
+  targetTransform: {fileID: 0}
   duration: 2
-  globTargetPosition: {x: -107.95, y: 360.4, z: -775.51}
-  globTargetRotation: {x: 61.4, y: -47.5, z: 0}
 --- !u!114 &1928280300182279313
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -48,6 +48,8 @@ public class cameraMovement : MonoBehaviour
         if (inMovingGame) {
             cameraObject.transform.position = desiredPosition;
             cameraObject.transform.LookAt(ballObject.transform);
+        } else {
+            transform.position = GameObject.Find("StationaryPoint").GetComponent<Transform>().position;
         }
 
         // Check if the current song has finished playing

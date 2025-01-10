@@ -12,10 +12,22 @@ public class touchingGround : MonoBehaviour
     public bool isGrounded = false;
     public bool onSnow = false;
     MeshRenderer meshRenderer;
+    private bool firstKillInWhile = true;
+    private float firstKillTimer = 0.0f;
 
     private void Start() {
         PV = ballObject.GetComponent<PhotonView>();
         meshRenderer = groundedDisplay.GetComponent<MeshRenderer>();
+    }
+
+    private void Update() {
+        if (PV.IsMine) {
+            if (firstKillTimer > 0.0f) {
+                firstKillTimer -= Time.deltaTime;
+            } else {
+                firstKillInWhile = true;
+            }
+        }
     }
 
     
@@ -45,9 +57,11 @@ public class touchingGround : MonoBehaviour
                 if (other.transform.localScale.magnitude - 1.5f >= ballObject.transform.localScale.magnitude) {
                     ballMovement ballScript = ballObject.GetComponent<ballMovement>();
                     ballScript.KillPlayer();
-                    if (PV.IsMine) {
+                    if (PV.IsMine && firstKillInWhile) {
                         PV.RPC("RPC_thisPlayerDead", RpcTarget.AllBuffered, ballObject.name);
                         PV.RPC("RPC_giveUpgrade", RpcTarget.AllBuffered, other.name);
+                        firstKillInWhile = false;
+                        firstKillTimer = 1.0f;
                     }
 
                 // } else if (other.transform.localScale.magnitude + 0.1f <= ballObject.transform.localScale.magnitude) {

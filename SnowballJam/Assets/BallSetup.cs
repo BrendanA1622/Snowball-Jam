@@ -58,18 +58,44 @@ public class BallSetup : MonoBehaviour
                 PV.RPC("RPC_updateScore", RpcTarget.All, gameObject.name, (int)myBall.score);
             }
         }
-        
+    }
+
+    public void removeFromBoard(string playerName) {
+        leaderboard.RemovePlayer(playerName);
+    }
+
+    public void kill() {
+        Debug.Log(gameObject.name + " is killed !! ");
+        myBall.KillPlayer();
+    }
+
+    public void upgrade() {
+        Debug.Log(gameObject.name + " is upgraded ;)");
+        myBall.addUpgrades(2);
+    }
+
+    [PunRPC]
+    void RPC_removePlayerBoard(string playerName) {
+        Debug.Log("Remove from board: " + playerName);
+        GameObject playerOfInterest = GameObject.Find(playerName);
+        BallSetup ballSetupOfInterest = playerOfInterest.GetComponent<BallSetup>();
+        ballSetupOfInterest.removeFromBoard(playerName);
     }
 
     [PunRPC]
     void RPC_thisPlayerDead(string playerName) {
-        Debug.Log("Sholda killed: " + playerName);
-
+        Debug.Log("Shoulda killed: " + playerName);
+        GameObject playerOfInterest = GameObject.Find(playerName);
+        BallSetup ballSetupOfInterest = playerOfInterest.GetComponent<BallSetup>();
+        ballSetupOfInterest.kill();
     }
 
     [PunRPC]
     void RPC_giveUpgrade(string playerName) {
         Debug.Log("Shoulda upgraded: " + playerName);
+        GameObject playerOfInterest = GameObject.Find(playerName);
+        BallSetup ballSetupOfInterest = playerOfInterest.GetComponent<BallSetup>();
+        ballSetupOfInterest.upgrade();
     }
 
 

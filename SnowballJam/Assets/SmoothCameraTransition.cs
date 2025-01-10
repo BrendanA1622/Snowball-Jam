@@ -7,6 +7,8 @@ using Photon.Pun;
 
 public class SmoothCameraTransition : MonoBehaviour
 {
+    [SerializeField] private GameObject ballActualObject;
+    private PhotonView PV;
     [SerializeField] private ballMovement ballObject;
     [SerializeField] private cameraMovement camScript;
     [SerializeField] private GameObject gameUIElements;
@@ -17,10 +19,14 @@ public class SmoothCameraTransition : MonoBehaviour
 
     private bool isTransitioning = false;
 
-    public Vector3 globTargetPosition;
-    public Vector3 globTargetRotation;
+    private Vector3 globTargetPosition;
+    private Vector3 globTargetRotation;
 
     void Start() {
+        targetTransform = GameObject.Find("StationaryPoint").GetComponent<Transform>();
+        globTargetPosition = targetTransform.position;
+        globTargetRotation = targetTransform.rotation.eulerAngles;
+        PV = ballActualObject.GetComponent<PhotonView>();
         transform.position = globTargetPosition;
         transform.rotation = Quaternion.Euler(globTargetRotation);
     }
@@ -37,8 +43,15 @@ public class SmoothCameraTransition : MonoBehaviour
     }
 
     public void LeaveRoomToGo(int sceneIndex) {
+        PV.RPC("RPC_removePlayerBoard", RpcTarget.All, ballActualObject.name);
         PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel(sceneIndex);
+    }
+
+    void Update() {
+        if (PV.IsMine && Input.GetKeyDown(KeyCode.Escape)) {
+            MoveCamera();
+        }
     }
 
     public void MoveCamera()

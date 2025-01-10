@@ -19,7 +19,7 @@ public class DisplayNotification : MonoBehaviour
     void Update()
     {
         if (increasingAlpha) {
-            Debug.Log("Alpha: " + alphaValue);
+            // Debug.Log("Alpha: " + alphaValue);
             alphaValue += Time.deltaTime * 3.0f;
             if (alphaValue >= 1.0) {
                 alphaValue = 1.0f;
@@ -28,7 +28,7 @@ public class DisplayNotification : MonoBehaviour
             }
         }
         if (decreasingAlpha) {
-            Debug.Log("Alpha: " + alphaValue);
+            // Debug.Log("Alpha: " + alphaValue);
             alphaValue -= Time.deltaTime * 0.5f;
             if (alphaValue <= 0.0) {
                 alphaValue = 0.0f;

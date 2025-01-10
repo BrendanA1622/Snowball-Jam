@@ -193,34 +193,82 @@ public class Leaderboard : MonoBehaviour
         }
     }
 
+    public void RemovePlayer(string playerName)
+    {
+        // Find the index of the player
+        int index = playingBots.IndexOf(playerName);
+        if (index >= 0)
+        {
+            // Remove the player from all relevant lists
+            playingBots.RemoveAt(index);
+            originalNames.RemoveAt(index);
+            scores.RemoveAt(index);
+
+            // Mark leaderboard for update
+            leaderboardNeedsUpdate = true;
+        }
+    }
+
     private void UpdateLeaderboard()
     {
         // Combine names and scores into pairs
         List<KeyValuePair<string, int>> pairedList = new List<KeyValuePair<string, int>>();
         for (int i = 0; i < playingBots.Count; i++)
         {
-            pairedList.Add(new KeyValuePair<string, int>(originalNames[i], scores[i]));
+            pairedList.Add(new KeyValuePair<string, int>(playingBots[i], scores[i]));
         }
 
         // Sort by scores in descending order
         pairedList.Sort((pair1, pair2) => pair2.Value.CompareTo(pair1.Value));
 
-        // Update the original lists
-        playingBots = pairedList.Select(pair => pair.Key).ToList();
-        scores = pairedList.Select(pair => pair.Value).ToList();
-
-        // Update UI labels
+        // Update the UI directly using the sorted list
         for (int i = 0; i < placementLabels.Count; i++)
         {
-            placementLabels[i].text = $"{i + 1}. {playingBots[i]} - {scores[i]}";
-            // Debug.Log("the string: " + playingBots[i] +"     and the string: " + importantName + "   give the bool: " + playingBots[i].Equals(importantName));
-            if (playingBots[i].Equals(importantName)) {
-                placementLabels[i].color = Color.yellow;
-            } else {
+            if (i < pairedList.Count)
+            {
+                string botName = pairedList[i].Key;
+                int botScore = pairedList[i].Value;
+
+                placementLabels[i].text = $"{i + 1}. {botName} - {botScore}";
+                placementLabels[i].color = botName.Equals(importantName) ? Color.yellow : Color.white;
+            }
+            else
+            {
+                // Clear unused labels
+                placementLabels[i].text = "";
                 placementLabels[i].color = Color.white;
             }
         }
     }
+
+    // private void UpdateLeaderboard()
+    // {
+    //     // Combine names and scores into pairs
+    //     List<KeyValuePair<string, int>> pairedList = new List<KeyValuePair<string, int>>();
+    //     for (int i = 0; i < playingBots.Count; i++)
+    //     {
+    //         pairedList.Add(new KeyValuePair<string, int>(originalNames[i], scores[i]));
+    //     }
+
+    //     // Sort by scores in descending order
+    //     pairedList.Sort((pair1, pair2) => pair2.Value.CompareTo(pair1.Value));
+
+    //     // Update the original lists
+    //     playingBots = pairedList.Select(pair => pair.Key).ToList();
+    //     scores = pairedList.Select(pair => pair.Value).ToList();
+
+    //     // Update UI labels
+    //     for (int i = 0; i < placementLabels.Count; i++)
+    //     {
+    //         placementLabels[i].text = $"{i + 1}. {playingBots[i]} - {scores[i]}";
+    //         // Debug.Log("the string: " + playingBots[i] +"     and the string: " + importantName + "   give the bool: " + playingBots[i].Equals(importantName));
+    //         if (playingBots[i].Equals(importantName)) {
+    //             placementLabels[i].color = Color.yellow;
+    //         } else {
+    //             placementLabels[i].color = Color.white;
+    //         }
+    //     }
+    // }
 
     // Call this method whenever a score changes
     public void UpdateScore(string botName, int newScore)
