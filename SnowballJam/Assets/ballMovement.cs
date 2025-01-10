@@ -86,24 +86,10 @@ public class ballMovement : MonoBehaviour
     public AudioClip soundEffectDie;
 
     PhotonView view;
-    public GameObject higherPlayer;
 
     private bool colorHasBeenEstablished = false;
 
 
-
-    // [PunRPC]
-    // public void SendScoreToPlayer(int score)
-    // {
-    //     Debug.Log("My score is: " + score);
-    // }
-
-    // public void CallSendScore(int score)
-    // {
-    //     // Call the RPC
-    //     // PhotonView photonView = higherPlayer.GetComponent<PhotonView>();
-    //     view.RPC("SendScoreToPlayer", RpcTarget.All, score);
-    // }
 
     public void setColor(Vector3 vecColor) {
         Renderer renderer = GetComponent<Renderer>();
@@ -113,12 +99,11 @@ public class ballMovement : MonoBehaviour
     }
 
     public void establishColor() {
-        view = higherPlayer.GetComponent<PhotonView>();
+        view = GetComponent<PhotonView>();
 
         if (view.IsMine)
         {
             // Debug.Log("The view was mine :p");
-            // Get player properties
             var playerData = PhotonNetwork.LocalPlayer.CustomProperties;
             if (playerData.ContainsKey("Nickname"))
             {
@@ -149,7 +134,7 @@ public class ballMovement : MonoBehaviour
     void Start()
     {
         
-        view = higherPlayer.GetComponent<PhotonView>();
+        view = GetComponent<PhotonView>();
 
         // if (!GetComponent<PhotonView>().IsMine)
         // {
@@ -214,40 +199,13 @@ public class ballMovement : MonoBehaviour
 
 
         if (!view.IsMine) {
-            // PlayerData.Instance.globalScoreInt = (int)ownBall.score;
             ballMovement playerCommunication = GetComponent<ballMovement>();
-            // playerCommunication.CallSendScore((int)score);
         }
-        // foreach (PhotonView view in FindObjectsOfType<PhotonView>())
-        // {
-        //     if (!view.IsMine)
-        //     {
-        //         // Debug.Log("Found other player's object at position: " + view.transform.position);
-        //     }
-        // }
         
         if (view.IsMine) {
 
-            // string colorString = PlayerPrefs.GetString("SkinColor", "#FFFFFF"); // Default to white if no color is saved
-
-            // // Convert the color string to a Color object
-            // if (ColorUtility.TryParseHtmlString(colorString, out Color skinColor))
-            // {
-            //     // Assign the color to the material
-            //     // targetMaterial.color = skinColor;
-            //     targetMaterial.SetColor("_Color", skinColor);
-            //     Debug.Log($"Skin color applied: {skinColor}");
-            // }
-
-
-
-            // Debug.Log(PlayerPrefs.GetString("SkinColor"));
-
-
-            // targetMaterial.SetColor("_Color", PlayerData.Instance.SkinColor);
-
             score = rb.transform.localScale.magnitude * 100f;
-            leaderboard.scores[10] = (int)score;
+            // leaderboard.scores[10] = (int)score;
 
             allParticles.transform.localScale = rb.transform.localScale;
             jumpParticles.transform.localScale = rb.transform.localScale;
@@ -539,8 +497,7 @@ public class ballMovement : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
         if (!firstEndEmit) {
             startPosition = newRandomPos();
-            higherPlayer.transform.position = startPosition;
-            transform.position = higherPlayer.transform.position;
+            transform.position = startPosition;
             // Debug.Log("START POSITION: " + startPosition);
             transform.localScale = startScale;
             meshRenderer = ballObject.GetComponent<MeshRenderer>();

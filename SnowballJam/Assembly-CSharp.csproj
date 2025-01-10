@@ -74,7 +74,6 @@
     <Compile Include="Assets\DoNotRotate.cs" />
     <Compile Include="Assets\followBallPos.cs" />
     <Compile Include="Assets\FlexibleColorPicker\Scripts\FCP_Persistence.cs" />
-    <Compile Include="Assets\ResetPlayerForSpawn.cs" />
     <Compile Include="Assets\PlayerCommunication.cs" />
     <Compile Include="Assets\DisplayNotification.cs" />
     <Compile Include="Assets\PlayerCanvasManager.cs" />

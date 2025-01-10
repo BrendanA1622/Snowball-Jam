@@ -10987,7 +10987,6 @@ GameObject:
   - component: {fileID: 2284405683623233994}
   - component: {fileID: 2243563004250506454}
   - component: {fileID: 6524436320812357510}
-  - component: {fileID: 531562698147111099}
   - component: {fileID: 2864387727434328943}
   - component: {fileID: 4916098839811940381}
   m_Layer: 0
@@ -11188,7 +11187,6 @@ MonoBehaviour:
   soundEffectPound: {fileID: 8300000, guid: 7e14f3c987dd62046a112e764d6eef0c, type: 3}
   soundEffectKill: {fileID: 8300000, guid: e3b9138e5f24fd44c97cbd28062d8d07, type: 3}
   soundEffectDie: {fileID: 8300000, guid: fd5815cc8546dbb45a99b1bf927ab75c, type: 3}
-  higherPlayer: {fileID: 0}
   minX: -900
   maxX: -100
   minZ: -900
@@ -11321,7 +11319,7 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 1
-  m_UseLocal: 1
+  m_UseLocal: 0
 --- !u!114 &2243563004250506454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11359,18 +11357,6 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &531562698147111099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2404816433194131074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b6862f62d341b84185c78af7a681e11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2864387727434328943
 MonoBehaviour:
   m_ObjectHideFlags: 0
